@@ -1,9 +1,15 @@
+import Layout from "@/components/layout";
 
 export default function Home() {
   return (
     <>
-    <h1>Veridoc</h1>
-     
+      <div className="flex">
+        
+      </div>
     </>
   );
 }
+
+// Home.getLayout = function getLayout(page) {
+//   return <Layout>{page}</Layout>;
+// };
