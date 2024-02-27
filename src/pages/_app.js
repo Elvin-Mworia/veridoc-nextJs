@@ -9,7 +9,7 @@ import Layout from "@/components/layout";
 export default function App({ Component, pageProps }) {
   const persistor = persistStore(store);
 
-  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
+  const getLayout = Component.getLayout || ((page) => page);
 
   return (
     <>
