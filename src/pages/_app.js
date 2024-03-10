@@ -1,17 +1,23 @@
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import store from "../store/store";
-import {persistStore} from "redux-persist"
-import {PersistGate} from "redux-persist/integration/react"
-export default function App({ Component, pageProps }) {
-  const persistor=persistStore(store);
-  return (<>
-    <Provider store={store}>
-    <PersistGate persistor={persistor}>
-    <Component {...pageProps} />
-    </PersistGate>
-  
-  </Provider>
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
+import "@/styles/globals.css";
+import Layout from "@/components/layout";
+
+export default function App({ Component, pageProps }) {
+  const persistor = persistStore(store);
+
+  const getLayout = Component.getLayout || ((page) => page);
+
+  return (
+    <>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          {getLayout(<Component {...pageProps} />)}
+        </PersistGate>
+      </Provider>
     </>
-  )
+  );
 }
