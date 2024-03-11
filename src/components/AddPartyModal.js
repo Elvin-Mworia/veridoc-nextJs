@@ -25,27 +25,54 @@ export default function AddPartyModal({ isOpen, onClose, onAddParty }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-5 rounded-lg shadow-lg">
         {/* Form fields for adding a new party */}
+        {/* Category - Radio Buttons */}
         <div className="mb-4">
-          <label className="block font-bold text-sm text-gray-700 mb-2">
+          <span className="block font-bold text-sm text-gray-700 mb-2">
             Category
-          </label>
-          <input
-            className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-main-blue focus:ring focus:ring-main-blue focus:ring-opacity-50"
-            name="category"
-            value={newParty.category}
-            onChange={handleChange}
-          />
+          </span>
+          <div className="flex gap-4">
+            <label>
+              <input
+                type="radio"
+                name="category"
+                value="Individual"
+                checked={newParty.category === "Individual"}
+                onChange={handleChange}
+              />
+              Individual
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="category"
+                value="Company"
+                checked={newParty.category === "Company"}
+                onChange={handleChange}
+              />
+              Company
+            </label>
+          </div>
         </div>
+
+        {/* Party Type - Select */}
         <div className="mb-4">
           <label className="block font-bold text-sm text-gray-700 mb-2">
             Party Type
           </label>
-          <input
-            className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-main-blue focus:ring focus:ring-main-blue focus:ring-opacity-50"
+          <select
             name="partyType"
             value={newParty.partyType}
             onChange={handleChange}
-          />
+            className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-main-blue focus:ring focus:ring-main-blue focus:ring-opacity-50"
+            required
+          >
+            <option value="">Select Party Type</option>
+            <option value="1st Plaintiff">1st Plaintiff</option>
+            <option value="1st Respondent">1st Respondent</option>
+            <option value="2nd Plaintiff">2nd Plaintiff</option>
+            <option value="2nd Respondent">2nd Respondent</option>
+            {/* Add other party types as needed */}
+          </select>
         </div>
         <div className="mb-4">
           <label className="block font-bold text-sm text-gray-700 mb-2">

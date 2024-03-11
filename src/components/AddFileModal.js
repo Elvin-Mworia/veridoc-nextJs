@@ -40,15 +40,21 @@ function AddFileModal({ isOpen, onClose, onAddFile }) {
             >
               File Type
             </label>
-            <input
-              type="text"
+            <select
               name="fileType"
               id="fileType"
               value={fileData.fileType}
               onChange={handleInputChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               required
-            />
+            >
+              <option value="">Select a file type</option>
+              <option value="petition">Petition</option>
+              <option value="motion">Motion</option>
+              <option value="complaint">Complaint</option>
+              <option value="affidavit">Affidavit</option>
+              <option value="other">Other</option>
+            </select>
           </div>
 
           <div>

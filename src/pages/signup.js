@@ -67,6 +67,19 @@ export default function signup() {
               </fieldset>
 
               <div className="flex flex-col">
+                <label htmlFor="name" className="font-bold block">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col">
                 <label htmlFor="address" className="font-bold block">
                   Address
                 </label>
