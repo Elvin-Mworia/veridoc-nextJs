@@ -13,11 +13,11 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
-      <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          {getLayout(<Component {...pageProps} />)}
-        </PersistGate>
-      </Provider>
+      {/* <Provider store={store}> */}
+      {/* <PersistGate persistor={persistor}> */}
+      {getLayout(<Component {...pageProps} />)}
+      {/* </PersistGate> */}
+      {/* </Provider> */}
     </>
   );
 }

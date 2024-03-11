@@ -1,0 +1,107 @@
+// pages/multistepform.js
+import Layout from "@/components/layout"
+import { useState } from "react";
+
+export default function MultiStepForm() {
+  // State to track current form step
+  const [currentStep, setCurrentStep] = useState(1);
+  // State to store form data
+  const [formData, setFormData] = useState({
+    accountType: "",
+    address: "",
+    phoneNumber: "",
+    image: null,
+  });
+
+  // Function to move to the next form step
+  const nextStep = () => {
+    setCurrentStep(currentStep + 1);
+  };
+
+  // Function to move to the previous form step
+  const prevStep = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
+  // Function to handle form input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // Function to handle image file changes
+  const handleImageChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
+  };
+
+  // Function to submit the form
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission here (e.g., send data to an API)
+  };
+
+  // Function to render the current step form
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <div>
+            <label>Account Type:</label>
+            <input
+              type="text"
+              name="accountType"
+              value={formData.accountType}
+              onChange={handleChange}
+            />
+            <button onClick={nextStep}>Next</button>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
+            <label>Address:</label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+            <button onClick={prevStep}>Back</button>
+            <button onClick={nextStep}>Next</button>
+          </div>
+        );
+      case 3:
+        return (
+          <div>
+            <label>Phone Number:</label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+            />
+            <button onClick={prevStep}>Back</button>
+            <button onClick={nextStep}>Next</button>
+          </div>
+        );
+      case 4:
+        return (
+          <div>
+            <label>Upload Image:</label>
+            <input type="file" onChange={handleImageChange} />
+            {formData.image && <p>Image selected - {formData.image.name}</p>}
+            <button onClick={prevStep}>Back</button>
+            <button onClick={handleSubmit}>Submit</button>
+          </div>
+        );
+      default:
+        return <div>Form Completed</div>;
+    }
+  };
+
+  return <form onSubmit={handleSubmit}>{renderStep()}</form>;
+}
+
+MultiStepForm.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
+};
