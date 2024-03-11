@@ -46,9 +46,9 @@ export default function Home() {
             efficiency, setting a new standard for legal processes worldwide.
           </p>
           <div>
-            <a className="bg-main-blue rounded px-6 py-2 text-white mx-2">
+            <Link className="bg-main-blue rounded px-6 py-2 text-white mx-2" href='/signup' >
               Signup
-            </a>
+            </Link>
           </div>
         </div>
       </div>
