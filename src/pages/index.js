@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -17,36 +18,37 @@ export default function Home() {
             Decentralizing Trust: Fairness for All
           </p>
         </div>
-        <a
-          href="/signup"
+        <Link
+          href="/dashboard"
           className="bg-main-blue rounded px-5 py-1 text-white ml-auto"
         >
-          Sign Up
-        </a>
+          Login
+        </Link>
       </div>
-      <div className="grow flex justify-center items-center">
-        <div className="w-4/6 h-4/6 bg-transparent-blue/60 rounded flex justify-center items-center">
-          <div className="w-4/6 h-4/6 flex flex-col justify-center">
-            <input
-              type="text"
-              name="Email"
-              id="email"
-              className="w-full p-2 rounded text-main-blue placeholder:text-main-blue my-3 focus:outline-main-blue"
-              placeholder="Email"
-            />
-            <input
-              type="password"
-              className="w-full p-2 rounded text-main-blue placeholder:text-main-blue my-3 focus:outline-main-blue"
-              placeholder="Password"
-            />
-            <div className="flex justify-between my-3 items-center">
-              <button className="bg-main-blue text-white py-2 w-2/6 rounded">
-                Login
-              </button>
-              <a href="#" className="text-sm underline text-main-blue">
-                Forgot Password?
-              </a>
-            </div>
+      <div className="grow flex items-center w-full">
+        <div className="image-part w-3/6">
+          <Image
+            className=""
+            width={500}
+            height={500}
+            src="/veridoc_logo.png"
+            alt="Veridoc Log"
+          />
+        </div>
+        <div className="w-3/6 p-4">
+          <h2 className="text-4xl font-bold mb-4">
+            Empowering the Judiciary with Blockchain
+          </h2>
+          <p className="mb-6">
+            Veridoc introduces a revolutionary e-filing system designed to
+            transform judicial document management. Utilizing blockchain
+            technology, we offer unmatched security, transparency, and
+            efficiency, setting a new standard for legal processes worldwide.
+          </p>
+          <div>
+            <a className="bg-main-blue rounded px-6 py-2 text-white mx-2">
+              Signup
+            </a>
           </div>
         </div>
       </div>
