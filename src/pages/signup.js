@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 export default function signup() {
   return (
     <div className="h-screen flex flex-col">
@@ -20,6 +19,7 @@ export default function signup() {
         <a
           href="/login"
           className="bg-main-blue rounded px-5 py-1 text-white ml-auto"
+          onClick={()=>{console.log("login")}}
         >
           Login
         </a>

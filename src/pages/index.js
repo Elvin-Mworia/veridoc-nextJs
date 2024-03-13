@@ -1,7 +1,33 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const [isWindowAvailable, setIsWindowAvailable] = useState(false);
+  let othent;
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsWindowAvailable(true);
+       // Import the connect function only after window is available
+       import('@othent/kms').then((module) => {
+       othent= module
+      });
+    }else{
+      setIsWindowAvailable(false);
+
+    }
+  }, [isWindowAvailable]);
+//connects the othentkms during signup or login
+  async function handleConnect() {
+    try{
+    const res = await  othent.connect();
+    console.log("Connect,\n", res);
+    }catch(err){
+      console.log(err)
+    }
+  };
   return (
     <div className="h-screen flex flex-col">
       <div className="flex h-16 items-center w-full p-6">
@@ -14,13 +40,14 @@ export default function Home() {
         />
         <div className="ml-5">
           <h1 className="text-3xl font-bold text-secondary-blue">Veridoc</h1>
-          <p className="text-sm text-alt-blue">
+          <p className="text-sm text-alt-blue"> 
             Decentralizing Trust: Fairness for All
           </p>
         </div>
         <Link
           href="/dashboard"
           className="bg-main-blue rounded px-5 py-1 text-white ml-auto"
+          onClick={handleConnect}
         >
           Login
         </Link>
@@ -34,7 +61,7 @@ export default function Home() {
             src="/veridoc_logo.png"
             alt="Veridoc Log"
           />
-        </div>
+        </div> 
         <div className="w-3/6 p-4">
           <h2 className="text-4xl font-bold mb-4">
             Empowering the Judiciary with Blockchain
@@ -46,7 +73,8 @@ export default function Home() {
             efficiency, setting a new standard for legal processes worldwide.
           </p>
           <div>
-            <Link className="bg-main-blue rounded px-6 py-2 text-white mx-2" href='/signup' >
+            <Link className="bg-main-blue rounded px-6 py-2 text-white mx-2" href='/signup' 
+              onClick={handleConnect}>
               Signup
             </Link>
           </div>
