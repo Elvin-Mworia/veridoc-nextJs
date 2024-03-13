@@ -21,5 +21,5 @@ reducers:{
     }
 }
 })
-
+export const  {userRegInfo}=UserRegInfoSlice.actions;
 export default UserRegInfoSlice.reducer;

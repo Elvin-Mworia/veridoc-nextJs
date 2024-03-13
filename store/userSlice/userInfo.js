@@ -15,5 +15,5 @@ reducers:{
     }
 }
 })
-
+export const  {updateuserinfo}=UserInfoSlice.actions;
 export default UserInfoSlice.reducer;
