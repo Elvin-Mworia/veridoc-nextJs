@@ -12,4 +12,5 @@ reducers:{
 }
 })
 
+export const  {updateLoginState}=LoginSlice.actions;
 export default LoginSlice.reducer;
