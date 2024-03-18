@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useSelector,useDispatch} from "react-redux";
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import {updateLoginState} from "../../store/userSlice/loginStatus"
+import axios from "axios"
 
 export default function Home() {
   const router = useRouter()
@@ -30,10 +31,26 @@ export default function Home() {
     try{
     if(auth==="login"){
     othent.connect().then((res)=>{
-      dispatch(updateLoginState({loginStatus:true}))
-      dispatch(updateuserinfo({walletAddress:res.walletAddress,name:res.name,role:"normalUser"}))
-      router.push( "/dashboard");
-      console.log("Logged in,\n", res); 
+      let walletAddress=res.walletAddress;
+      let name=res.name;
+      axios.post('http://localhost:5001/users/login',{walletAddress:walletAddress}).then((res)=>{
+      if(res.status===200){
+        dispatch(updateLoginState({loginStatus:true}))
+       dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:"normalUser"}))
+          alert(res.data.message);
+          console.log(res.data.message)
+          router.push( "/dashboard");
+     
+        }
+        
+      }).catch((err)=>{
+        console.log(err.response.data.message);
+        if(err.response.status===400){
+        alert(err.response.data.message.concat(",try signing up!"))
+        }
+        
+      })
+    
     });
     } else if(auth==="signup"){
       othent.connect().then((res)=>{
