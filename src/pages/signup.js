@@ -1,5 +1,39 @@
+"use client"
 import Image from "next/image";
+import {useState} from 'react';
+import axios from 'axios'
+import { useSelector} from "react-redux";
+import { useRouter } from 'next/navigation'
+
 export default function signup() {
+const router = useRouter();
+const {walletAddress,role}=useSelector((state)=>(state.userInfo))
+const[phone,setPhone]=useState(null)
+const[name,setName]=useState(null)
+const[email,setAddress]=useState(null)
+
+function handleSubmit(e){
+  e.preventDefault();
+  axios.post('http://localhost:5001/users/l2',{
+    walletAddress,email,phone,role,name
+  }).then((res)=>{
+   console.log(res);
+   if(res.response.status===200){
+    alert("registered successfully,proceed to login");
+    setName(null);
+    setPhone(null);
+    setAddress(null);
+   }
+   console.log(res.response.data.message)
+  router.push("/")
+  }).catch((err)=>{
+    if(err.response.status===400){
+      alert(err.response.data.message.concat(",proceed to login"));
+      router.push("/");
+    }
+  })
+
+}
   return (
     <div className="h-screen flex flex-col">
       <div className="flex h-16 items-center w-full p-6">
@@ -65,7 +99,6 @@ export default function signup() {
                   </label>
                 </div>
               </fieldset>
-
               <div className="flex flex-col">
                 <label htmlFor="name" className="font-bold block">
                   Name
@@ -74,7 +107,9 @@ export default function signup() {
                   type="text"
                   id="name"
                   name="name"
+                  value={name}
                   className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  onChange={(e)=>{setName(e.target.value)}}
                   required
                 />
               </div>
@@ -87,6 +122,8 @@ export default function signup() {
                   type="text"
                   id="address"
                   name="address"
+                  value={email}
+                  onChange={(e)=>{setAddress(e.target.value)}}
                   className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   required
                 />
@@ -100,7 +137,9 @@ export default function signup() {
                   type="tel"
                   id="phoneNumber"
                   name="phoneNumber"
+                  value={phone}
                   className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                 onChange={(e)=>{setPhone(e.target.value)}}
                   required
                 />
               </div>
@@ -108,6 +147,7 @@ export default function signup() {
               <button
                 type="submit"
                 className="bg-main-blue rounded px-5 py-2 text-white mt-4 self-center uppercase text-sm"
+                onClick={handleSubmit}
               >
                 register
               </button>
