@@ -10,6 +10,7 @@
   },
   "proxy": "http://127.0.0.1:5001",
   "dependencies": {
+    "@irys/query": "^0.0.4",
     "@othent/kms": "^1.0.8",
     "@reduxjs/toolkit": "^2.1.0",
     "ardb": "^1.1.7",
