@@ -8,6 +8,10 @@ export default function Dashboard() {
   const [isAdminModalOpen, setAdminModalOpen] = useState(false);
   const [folders, setFolders] = useState(["Milimani"]); // Initial folders list
   const [admins, setAdmins] = useState([]);
+  const [transactions, setTransactions] = useState([
+    "23423423432432423",
+    "324324g34h3k4hl3423",
+  ]);
 
   const addFolder = (e) => {
     e.preventDefault();
@@ -118,21 +122,14 @@ export default function Dashboard() {
       {/* Transactions Card */}
       <div className="w-64 bg-white  mx-4 min-h-fit">
         <div className="bg-transparent-blue/60 text-center text-main-blue p-2 font-bold">
-          Admins
+          Transactions
         </div>
         <div className="">
-          <p className="text-main-blue text-center p-2">
-            sadahldafdsafdafhdfldafkdAda
-          </p>
-          <p className="text-main-blue text-center p-2">
-            sadahldafdsafdafhdfldafkdAda
-          </p>{" "}
-          <p className="text-main-blue text-center p-2">
-            sadahldafdsafdafhdfldafkdAda
-          </p>{" "}
-          <p className="text-main-blue text-center p-2">
-            sadahldafdsafdafhdfldafkdAda
-          </p>
+          {transactions.map((transaction, index) => (
+            <div key={index} className="">
+              <p className="text-main-blue text-center p-2">{transaction}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
