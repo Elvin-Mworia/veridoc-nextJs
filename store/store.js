@@ -6,6 +6,9 @@ import storage from 'redux-persist/lib/storage'
 import UserRegInfoSlice from './userSlice/userRegistration';
 import UserInfoSlice from './userSlice/userInfo';
 import LoginSlice from './userSlice/loginStatus';
+import CaseStationSlice from "./caseSlice/caseStation"
+import CaseRankSlice  from   "./caseSlice/caseRank";
+import CaseDivisionSlice  from   "./caseSlice/caseDivision";
 
 const persistConfig = {
   key: 'root',
@@ -15,7 +18,11 @@ const persistConfig = {
 const rootReducer=combineReducers({
   registrationDetail:UserRegInfoSlice,
   userInfo:UserInfoSlice,
-  login:LoginSlice
+  login:LoginSlice,
+  station:CaseStationSlice,
+  rank:CaseRankSlice,
+  division:CaseDivisionSlice
+
   })
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

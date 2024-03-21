@@ -1,4 +1,8 @@
+import { useSelector } from "react-redux";
 export default function StepFive({ prevStep, formData, handleSubmit }) {
+  const {courtRank}=useSelector((state)=>(state.rank))
+  const {courtStation}=useSelector((state)=>(state.station))
+  const {courtDivision}=useSelector((state)=>(state.division))
   return (
     <div className="p-10">
       <h1 className="font-bold text-secondary-blue text-2xl mb-4">
@@ -7,14 +11,16 @@ export default function StepFive({ prevStep, formData, handleSubmit }) {
 
       <div className="mb-4">
         <h2 className="font-bold text-main-blue">Case Details:</h2>
+        <p className="font-bold">Court Rank</p>
+        <p>{courtRank || "Not specified"}</p>
         <p className="font-bold">Court Station</p>
-        <p>{formData.courtStation || "Not specified"}</p>
+        <p>{courtStation || "Not specified"}</p>
         <p className="font-bold">Court Division</p>
-        <p>{formData.courtDivision || "Not specified"}</p>
-        <p className="font-bold">Case Category</p>
-        <p> {formData.caseCategory || "Not specified"}</p>
+        <p>{courtDivision || "Not specified"}</p>
+        {/* <p className="font-bold">Case Category</p> */}
+        {/* <p> {formData.caseCategory || "Not specified"}</p>
         <p className="font-bold">Case Type</p>
-        <p> {formData.caseType || "Not specified"}</p>
+        <p> {formData.caseType || "Not specified"}</p> */}
         
       </div>
 
