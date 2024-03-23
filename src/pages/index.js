@@ -36,10 +36,18 @@ export default function Home() {
       axios.post('http://localhost:5001/users/login',{walletAddress:walletAddress}).then((res)=>{
       if(res.status===200){
         dispatch(updateLoginState({loginStatus:true}))
-       dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:"normalUser"}))
+       dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:res.data.role}))
           alert(res.data.message);
           console.log(res.data.message)
-          router.push( "/dashboard");
+          if(res.data.role=="staff"){
+            router.push( "/staff/dashboard");
+          }
+          if(res.data.role=="admin"){
+            router.push( "/admin/dashboard");
+          }
+         if(res.data.role=="normalUser"){
+            router.push( "/admin/dashboard");
+          }
      
         }
         
