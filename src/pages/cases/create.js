@@ -1,3 +1,4 @@
+"use client"
 import StepOne from "@/components/StepOne";
 import StepThree from "@/components/StepThree";
 import StepTwo from "@/components/StepTwo";
@@ -13,6 +14,7 @@ export default function MultiStepForm() {
   const [currentStep, setCurrentStep] = useState(1);
   // State to store form data
   const [formData, setFormData] = useState({
+    courtRank: null,
     courtStation: null,
     courtDivision: null,
     caseCategory: null,
@@ -35,6 +37,7 @@ export default function MultiStepForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    console.log(formData);
   };
 
   // function to handle adding file data from StepFour
@@ -49,6 +52,7 @@ export default function MultiStepForm() {
   const handleSubmit = () => {
     // Handle final form submission logic here
     // E.g., send formData to an API
+    
     console.log("Submitting form data:", formData);
     // Potentially redirect the user to a success page or display a success message
   };

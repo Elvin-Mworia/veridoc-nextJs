@@ -1,12 +1,19 @@
 "use client"
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react';
+import { useSelector,useDispatch} from "react-redux";
+import {updateuserinfo} from "../../store/userSlice/userInfo";
+import {updateLoginState} from "../../store/userSlice/loginStatus"
+import axios from "axios"
 
 export default function Home() {
+  const router = useRouter()
   const [isWindowAvailable, setIsWindowAvailable] = useState(false);
   let othent;
-
+  const dispatch=useDispatch();
+  const {walletAddress,name,role}=useSelector((state)=>(state.userInfo))
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsWindowAvailable(true);
@@ -20,13 +27,41 @@ export default function Home() {
     }
   }, [isWindowAvailable]);
 //connects the othentkms during signup or login
-  async function handleConnect() {
+  async function handleConnect(auth) {
     try{
-    const res = await  othent.connect();
-    console.log("Connect,\n", res);
-    }catch(err){
-      console.log(err)
+    if(auth==="login"){
+    othent.connect().then((res)=>{
+      let walletAddress=res.walletAddress;
+      let name=res.name;
+      axios.post('http://localhost:5001/users/login',{walletAddress:walletAddress}).then((res)=>{
+      if(res.status===200){
+        dispatch(updateLoginState({loginStatus:true}))
+       dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:"normalUser"}))
+          alert(res.data.message);
+          console.log(res.data.message)
+          router.push( "/dashboard");
+     
+        }
+        
+      }).catch((err)=>{
+        console.log(err.response.data.message);
+        if(err.response.status===400){
+        alert(err.response.data.message.concat(",try signing up!"))
+        }
+        
+      })
+    
+    });
+    } else if(auth==="signup"){
+      othent.connect().then((res)=>{
+        dispatch(updateuserinfo({walletAddress:res.walletAddress,name:res.name,role:"normalUser"}))
+        router.push( "/signup");
+    })
+ 
     }
+  }catch(err){
+    console.log(err)
+  }
   };
   return (
     <div className="h-screen flex flex-col">
@@ -44,13 +79,12 @@ export default function Home() {
             Decentralizing Trust: Fairness for All
           </p>
         </div>
-        <Link
-          href="/dashboard"
+        <button
           className="bg-main-blue rounded px-5 py-1 text-white ml-auto"
-          onClick={handleConnect}
+          onClick={()=>{handleConnect('login')}}
         >
           Login
-        </Link>
+        </button>
       </div>
       <div className="grow flex items-center w-full">
         <div className="image-part w-3/6">
@@ -73,10 +107,10 @@ export default function Home() {
             efficiency, setting a new standard for legal processes worldwide.
           </p>
           <div>
-            <Link className="bg-main-blue rounded px-6 py-2 text-white mx-2" href='/signup' 
-              onClick={handleConnect}>
+            <button className="bg-main-blue rounded px-6 py-2 text-white mx-2" 
+                onClick={()=>{handleConnect('signup')}}>
               Signup
-            </Link>
+            </button>
           </div>
         </div>
       </div>

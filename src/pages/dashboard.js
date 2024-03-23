@@ -1,6 +1,56 @@
+"use client"
 import Layout from "@/components/layout";
-
+import Query from "@irys/query";
+import { useSelector} from "react-redux";
+import {useState,useEffect} from "react"
+import axios from "axios";
 export default function Dashboard() {
+  const {walletAddress}=useSelector((state)=>(state.userInfo))
+  const [files,setFiles]=useState([]);
+  const [pending,setPending]=useState([])
+  const [courtName,setCourtName]=useState("");
+
+  const myQuery=new Query();
+ async function getUserFiles(walletAddress){
+  let res=await myQuery.search("irys:transactions")
+	.tags([{ name: "Content-Type", values: ["application/pdf","application/epub+zip"] },
+  { name: "walletAddress", values: [walletAddress] }]);
+  //console.log(res);
+  if(res.length>0){
+    setFiles(...res)
+  }
+ }
+ //fetching user files then filtering the once with status of pending
+ function getUserPendingFiles(walletAddress){
+  axios.post("http://localhost:5001/cases/casesForUser",{walletAddress}).then(res=>{
+    if(res.status===200){  
+      setFiles(res.data.message);
+    let pendingFiles=res.data.message.filter((file)=>file.status==="pending");
+    console.log(pendingFiles.length)
+    setPending(pendingFiles);
+      }
+  }).catch((err)=>{
+    console.log(err);
+  })
+ }
+//get the name of a court provided is stationId
+ function getCourtName(stationId){
+  axios.post("http://localhost:5001/station/getStation",{stationId}).then(res=>{
+    if(res.status===200){  
+      setCourtName(res.data.message);
+      }
+  }).catch((err)=>{
+    console.log(err);
+  })
+
+ }
+
+useEffect(()=>{
+ // getUserFiles(walletAddress);
+ // getUserPendingFiles("d6KpB0ztMhjMnC9fuE3lp");
+  getUserPendingFiles(walletAddress);
+},[])
+
   return (
     <div className="py-6 ">
       <div className="flex justify-between">
@@ -29,53 +79,29 @@ export default function Dashboard() {
                   Status
                 </th>
                 <th scope="col" class="px-6 py-4">
-                  Actions
+                  Files
                 </th>
               </tr>
             </thead>
             <tbody className="border border-main-blue">
-              <tr class="text-main-blue">
+              {files.length>0 ? files.map((file,key)=>{
+                getCourtName(file.stationId)
+             
+                return(
+                  <>
+                   <tr class="text-main-blue">
                 <td class="whitespace-nowrap px-6 py-4 font-medium">
-                  HC00M/****/2023
+                  {file.caseId}
                 </td>
-                <td class="whitespace-nowrap px-6 py-4">Milimani High Court</td>
-                <td class="whitespace-nowrap px-6 py-4">Pending</td>
-                <td class="whitespace-nowrap px-6 py-4 flex justify-around">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6 text-green-500"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                    />
-                  </svg>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    />
-                  </svg>
-                </td>
+                <td class="whitespace-nowrap px-6 py-4">{courtName}</td>
+                <td class="whitespace-nowrap px-6 py-4">{file.status}</td>
+                <td class="whitespace-nowrap px-6 py-4"><a class="underline  hover:text-red-900">{file.txId}</a></td>
+               
               </tr>
+                  </>
+                )
+              }):<tr><td class="whitespace-nowrap px-6 py-4">No cases</td></tr>}
+             
             </tbody>
           </table>
         </div>
@@ -85,13 +111,13 @@ export default function Dashboard() {
             <p className="text-center h-8 text-white bg-secondary-blue">
               Cases
             </p>
-            <p className="p-2 text-center">10 Filed Cases</p>
+            <p className="p-2 text-center">{files.length} cases filed</p>
           </div>
           <div className="h-28 w-28 shadow m-3">
             <p className="text-center h-8 text-white bg-secondary-blue">
               Cases
             </p>
-            <p className="p-2 text-center">10 Pending Cases</p>
+            <p className="p-2 text-center">{pending.length} pending cases</p>
           </div>
         </div>
       </div>
