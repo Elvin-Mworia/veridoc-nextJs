@@ -2,7 +2,7 @@ import { configureStore ,applyMiddleware,combineReducers} from '@reduxjs/toolkit
 import { composeWithDevTools } from '@redux-devtools/extension';
 import logger from 'redux-logger';
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'
+import storage from "./storage"
 import UserRegInfoSlice from './userSlice/userRegistration';
 import UserInfoSlice from './userSlice/userInfo';
 import LoginSlice from './userSlice/loginStatus';
@@ -37,3 +37,4 @@ const Store = configureStore({
 },composeWithDevTools(applyMiddleware(logger)))
 
 export default Store;
+
