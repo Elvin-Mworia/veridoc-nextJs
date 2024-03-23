@@ -1,5 +1,12 @@
-export default function AddAdminModal({ isOpen, onClose, onSubmit }) {
+"use client"
+import axios from "axios";
+import {useState} from "react";
+export default function AddAdminModal({ isOpen, onClose}) {
   if (!isOpen) return null;
+const [walletAddress,setWalletAddress]=useState("");
+async function handleSubmit(){
+await axios.post("http://127.0.0.1:5001/users/l0",{walletAddress});
+}
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -8,22 +15,9 @@ export default function AddAdminModal({ isOpen, onClose, onSubmit }) {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            onSubmit(e);
+            handleSubmit();
           }}
         >
-          <label
-            htmlFor="adminName"
-            className="block text-sm font-medium text-main-blue"
-          >
-            Name
-          </label>
-          <input
-            type="text"
-            id="adminName"
-            name="adminName"
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 outline-transparent-blue"
-          />
 
           <label
             htmlFor="wallet"
@@ -35,6 +29,7 @@ export default function AddAdminModal({ isOpen, onClose, onSubmit }) {
             type="text"
             id="wallet"
             name="wallet"
+            onChange={(e)=>{setWalletAddress(e.target.value)}}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 outline-transparent-blue"
           />
@@ -50,6 +45,7 @@ export default function AddAdminModal({ isOpen, onClose, onSubmit }) {
             <button
               type="submit"
               className="py-2 px-4 bg-main-blue text-white rounded hover:bg-blue-700"
+              onClick={onClose}
             >
               Add
             </button>

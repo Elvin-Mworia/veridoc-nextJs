@@ -1,17 +1,33 @@
+"use client"
 import AddFolderModal from "@/components/AddFolderModal";
 import AddAdminModal from "@/components/AddAdminModal";
 import Layout from "@/components/layout";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from 'axios'
 
 export default function Dashboard() {
   const [isFolderModalOpen, setFolderModalOpen] = useState(false);
   const [isAdminModalOpen, setAdminModalOpen] = useState(false);
-  const [folders, setFolders] = useState(["Milimani"]); // Initial folders list
+  const [folders, setFolders] = useState([]); // Initial folders list
   const [admins, setAdmins] = useState([]);
   const [transactions, setTransactions] = useState([
     "23423423432432423",
     "324324g34h3k4hl3423",
   ]);
+
+  async function getFoldersAndAdmins(){
+    let folder=await axios.get("http://127.0.0.1:5001/station/getAllStationFolders");
+    let admins=await  axios.get("http://127.0.0.1:5001/users/getAllAdmins");
+    console.log(folder.data.folders)
+    console.log(admins.data.admins);
+     setFolders(folder.data.folders);
+     setAdmins(admins.data.admins);
+
+  }
+
+  useEffect(()=>{
+getFoldersAndAdmins();
+  },[])
 
   const addFolder = (e) => {
     e.preventDefault();
@@ -41,7 +57,7 @@ export default function Dashboard() {
               key={index}
               className="bg-alt-blue w-5/6 mx-auto rounded-lg p-2 text-white text-center m-2 "
             >
-              {folder}
+              {folder.name}
             </p>
           ))}
         </div>
@@ -69,8 +85,7 @@ export default function Dashboard() {
         {/* Modal Component */}
         <AddFolderModal
           isOpen={isFolderModalOpen}
-          onClose={() => setModalOpen(false)}
-          onSubmit={addFolder}
+          onClose={() => setFolderModalOpen(false)}
         />
       </div>
 
@@ -83,10 +98,10 @@ export default function Dashboard() {
           {admins.map((admin, index) => (
             <div
               key={index}
-              className=" w-5/6 mx-auto rounded-lg p-2 text-white text-center m-2"
+              className=" w-fit mx-auto rounded-lg p-2 text-white text-center m-2"
             >
-              <p className="text-main-blue">
-                {admin.name} - {admin.wallet}
+              <p className="text-main-blue  hover:text-red-900">
+                {admin.name} - {admin.walletAddress.slice(0,19)}
               </p>
             </div>
           ))}
@@ -115,7 +130,6 @@ export default function Dashboard() {
         <AddAdminModal
           isOpen={isAdminModalOpen}
           onClose={() => setAdminModalOpen(false)}
-          onSubmit={addAdmin}
         />
       </div>
 
