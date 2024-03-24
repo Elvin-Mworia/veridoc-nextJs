@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useSelector,useDispatch} from "react-redux";
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import {updateLoginState} from "../../store/userSlice/loginStatus"
+import { updateStaffStation } from "../../store/userSlice/staffStation";
 import axios from "axios"
 
 export default function Home() {
@@ -38,15 +39,16 @@ export default function Home() {
         dispatch(updateLoginState({loginStatus:true}))
        dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:res.data.role}))
           alert(res.data.message);
-          console.log(res.data.message)
+          console.log(res.data)
           if(res.data.role=="staff"){
+           dispatch(updateStaffStation({station:res.data.station}))
             router.push( "/staff/dashboard");
           }
           if(res.data.role=="admin"){
             router.push( "/admin/dashboard");
           }
          if(res.data.role=="normalUser"){
-            router.push( "/admin/dashboard");
+            router.push( "/dashboard");
           }
      
         }
