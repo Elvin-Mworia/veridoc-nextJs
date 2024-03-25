@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-function AddFileModal({ isOpen, onClose, onAddFile }) {
+function AddFileModal({ isOpen, onClose, onAddFile}) {
+  const {role}=useSelector((state) => state.userInfo);
   const [fileData, setFileData] = useState({
     fileType: "",
     caption: "",
     uploadDate: "", // You might want to auto-generate this based on the file upload timestamp
     file: null,
+    caseId:""
   });
 
   const handleInputChange = (e) => {
@@ -17,7 +20,6 @@ function AddFileModal({ isOpen, onClose, onAddFile }) {
     setFileData({
       ...fileData,
       file: e.target.files[0],
-      uploadDate: new Date().toISOString().slice(0, 10),
     });
   };
 
@@ -48,15 +50,39 @@ function AddFileModal({ isOpen, onClose, onAddFile }) {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               required
             >
+              {role==="staff"?<> <option value="">Select a file type</option>
+              <option value="petition">Judgement</option>
+              <option value="motion">Ruling</option>
+              <option value="complaint">Mention</option>
+            </>:<>
               <option value="">Select a file type</option>
               <option value="petition">Petition</option>
               <option value="motion">Motion</option>
               <option value="complaint">Complaint</option>
               <option value="affidavit">Affidavit</option>
               <option value="other">Other</option>
+              </>}
+            
             </select>
           </div>
-
+{role==="staff" ? <>  <div>
+            <label
+              htmlFor="caption"
+              className="block text-main-blue font-semibold"
+            >
+              Case Id
+            </label>
+            <input
+              type="text"
+              name="caption"
+              id="caption"
+              value={fileData.caseId}
+              onChange={handleInputChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+</> :<>  </>}
           <div>
             <label
               htmlFor="caption"

@@ -3,13 +3,17 @@ import { useSelector } from "react-redux";
 import { useEffect,useState} from "react";
 import axios from "axios"
 import dayjs from "dayjs"
-
+import AddFileModal from "@/components/AddFileModal";
 
 export default function Dashboard() {
   const {walletAddress}=useSelector((state)=>state.userInfo)
   const {station}=useSelector((state)=>state.staffStation)
   const [pendingApproval,setpendingApproval]=useState([])
   const [pendingCasesCount,setPendingCaseCount]=useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
 async  function fetchPengingApproval(){
     let res=await axios.post("http://127.0.0.1:5001/cases/getpendingfiles",{walletAddress,station})
     console.log(res.data);
@@ -21,6 +25,10 @@ function unixToDate(timestamp){
   const dateObject = dayjs.unix((Number(timestamp)/1000));
  return( dateObject.format("DD MMM YYYY,HH:mm"))
 }
+const handleAddFile = (fileData) => {
+  const updatedFiles = [...formData.files, fileData]; // Assuming `files` field in your formData
+  setFormData({ ...formData, files: updatedFiles });
+};
   useEffect(()=>{
     fetchPengingApproval();
     console.log(pendingApproval);
@@ -84,11 +92,18 @@ function unixToDate(timestamp){
           <p className="text-center p-10 text-3xl font-bold">{pendingCasesCount}</p>
         </div>
         <button
+        onClick={openModal}
           className="bg-main-blue text-white mt-10 px-3 py-2 rounded-lg"
         >
           Upload File
         </button>
       </div>
+      <AddFileModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onAddFile={handleAddFile}
+      />
+
     </div>
   );
 }
