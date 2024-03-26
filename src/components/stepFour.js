@@ -76,6 +76,7 @@ export default function StepFour({
         isOpen={isModalOpen}
         onClose={closeModal}
         onAddFile={handleAddFile}
+        scenario={"newcase"}
       />
 
       <div className="flex justify-center mt-12">

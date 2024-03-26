@@ -3,19 +3,33 @@ import { useSelector } from "react-redux";
 import axios from "axios"
 
 
-function AddFileModal({ isOpen, onClose,scenario}) {
+function AddFileModal({ isOpen, onClose,scenario,userfiles}) {
   let courtstation;
   const {role,walletAddress}=useSelector((state) => state.userInfo);
-  if(role==="staff"){
-    const {station}=useSelector((state) => state.staffStation);
-    courtstation=station;
-  }
   const [fileData, setFileData] = useState({
     fileType: "",
     caption: "",
     file: null,
     caseId:""
   });
+  const [courtName,setCourtName]=useState("");
+  if(role==="staff"){
+    const {station}=useSelector((state) => state.staffStation);
+    courtstation=station;
+  }
+ 
+  //get the name of a court provided is stationId
+ function getCourtName(stationId){
+  axios.post("http://localhost:5001/station/getStation",{stationId}).then(res=>{
+    if(res.status===200){  
+      setCourtName(res.data.message);
+      }
+  }).catch((err)=>{
+    console.log(err);
+  })
+
+ }
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,17 +45,27 @@ function AddFileModal({ isOpen, onClose,scenario}) {
 
   const handleSubmit =async (e) => {
     e.preventDefault();
+    let res;
     // onAddFile(fileData);
     if(scenario==="subsequent" && role==="staff"){
-   let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtstation,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
+   res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtstation,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
     'Content-Type': 'multipart/form-data'
   }})
+}
+  if(scenario==="subsequent" && role==="normalUser"){
+    let file=userfiles.filter(x=>x.caseId===fileData.caseId);
+    console.log(file);
+    getCourtName(file[0].stationId);
+    res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtName,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
+     'Content-Type': 'multipart/form-data'
+   }})
+  }
   if(res.status!==200){
     alert(res.data.message);
   }else{
     alert(res.data.message);
   }
-    }
+    
     onClose();
     setFileData({ fileType:"",caption:"",file:null,caseId:""})
   };
@@ -76,7 +100,9 @@ function AddFileModal({ isOpen, onClose,scenario}) {
               <option value="Petition">Petition</option>
               <option value="Motion">Motion</option>
               <option value="Complaint">Complaint</option>
+              <option value="Reply">Reply</option>
               <option value="Affidavit">Affidavit</option>
+              <option value="Support Affidavit">Further Supporting Affidavit</option>
               <option value="other">Other</option>
               </>}
             
@@ -99,7 +125,30 @@ function AddFileModal({ isOpen, onClose,scenario}) {
               required
             />
           </div>
-</> :<>  </>}
+</> :<>{scenario==="subsequent"? <><label
+              htmlFor="caseId"
+              className="block text-main-blue font-semibold"
+            >
+              Case Id
+            </label>
+<select
+              name="caseId"
+              id="caseId"
+              value={fileData.caseId}
+              onChange={handleInputChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              required
+            ><option value="">Select a case</option>
+               {
+          userfiles.length>0?userfiles.map((file,index)=>{
+                return(
+                  <>
+                   <option value={file.caseId}>{file.caseId}</option>
+                  </>
+                )
+              }): <option value="">No cases</option>
+            }
+            </select></>:<></>}  </>}
           <div>
             <label
               htmlFor="caption"
@@ -155,5 +204,6 @@ function AddFileModal({ isOpen, onClose,scenario}) {
     </div>
   );
 }
+
 
 export default AddFileModal;
