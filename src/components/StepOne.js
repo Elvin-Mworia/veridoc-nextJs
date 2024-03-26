@@ -15,7 +15,7 @@ const {courtDivision}=useSelector((state)=>(state.division))
     <div className="p-10">
       <h1 className="font-bold text-secondary-blue text-2xl">File New Case</h1>
 
-      <div className="w-4/6 mx-auto bg-white rounded p-5">u
+      <div className="w-4/6 mx-auto bg-white rounded p-5">
         <h2 className="text-center text-secondary-blue">Case Details</h2>
 
         {/* Categories section */}

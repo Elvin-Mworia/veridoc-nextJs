@@ -4,11 +4,16 @@ import Query from "@irys/query";
 import { useSelector} from "react-redux";
 import {useState,useEffect} from "react"
 import axios from "axios";
+import AddFileModal from "@/components/AddFileModal";
+
 export default function Dashboard() {
   const {walletAddress}=useSelector((state)=>(state.userInfo))
   const [files,setFiles]=useState([]);
   const [pending,setPending]=useState([])
   const [courtName,setCourtName]=useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const myQuery=new Query();
  async function getUserFiles(walletAddress){
@@ -62,8 +67,9 @@ useEffect(()=>{
         >
           File New Case
         </a>
+
       </div>
-      <div className="flex mt-8">
+      <div className="flex mt-8"> 
         {/* Table Section */}
         <div className="w-3/4">
           <table class="min-w-full text-left text-sm font-light">
@@ -111,14 +117,32 @@ useEffect(()=>{
             <p className="text-center h-8 text-white bg-secondary-blue">
               Cases
             </p>
-            <p className="p-2 text-center">{files.length} cases filed</p>
+            <p className="p-2 text-center">{files.length} case filed</p>
           </div>
-          <div className="h-28 w-28 shadow m-3">
-            <p className="text-center h-8 text-white bg-secondary-blue">
-              Cases
+          <div className="h-34 w-28 shadow m-3">
+            <p className="text-center h-14 text-white bg-secondary-blue">
+              Pending Approval
             </p>
-            <p className="p-2 text-center">{pending.length} pending cases</p>
+            <p className="p-2 text-center">{pending.length} pending case</p>
           </div>
+          {files.length>0?  <button
+        onClick={openModal}
+          className="bg-main-blue text-white mt-10 px-3 py-2 rounded-lg"
+        >
+          Upload subsequent File
+        </button>:  <button
+        disabled
+          className="bg-blue-300  text-white mt-10 px-3 py-2 rounded-lg"
+        >
+          Upload subsequent File
+        </button>}
+      
+        <AddFileModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        scenario={"subsequent"}
+        userfiles={files}
+      />
         </div>
       </div>
     </div>
