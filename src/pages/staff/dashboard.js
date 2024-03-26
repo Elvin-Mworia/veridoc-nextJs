@@ -14,24 +14,18 @@ export default function Dashboard() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-async  function fetchPengingApproval(){
+async function fetchPendingApproval(){
     let res=await axios.post("http://127.0.0.1:5001/cases/getpendingfiles",{walletAddress,station})
-    console.log(res.data);
     setpendingApproval(res.data.message);
     setPendingCaseCount(res.data.message.length);
   }
-
+//converts unix timestamp to local time
 function unixToDate(timestamp){
   const dateObject = dayjs.unix((Number(timestamp)/1000));
  return( dateObject.format("DD MMM YYYY,HH:mm"))
 }
-const handleAddFile = (fileData) => {
-  const updatedFiles = [...formData.files, fileData]; // Assuming `files` field in your formData
-  setFormData({ ...formData, files: updatedFiles });
-};
   useEffect(()=>{
-    fetchPengingApproval();
-    console.log(pendingApproval);
+    fetchPendingApproval();
   },[])
   return (
     <div className=" flex p-3 mt-10">
@@ -83,10 +77,6 @@ const handleAddFile = (fileData) => {
         {/* Card Container */}
         <div className="w-1/4 mt-1 flex flex-col  items-center">
         {/* Card */}
-        {/* <div className="h-36 w-auto bg-white text-main-blue rounded-[10px] m-4 shadow-md hover:shadow-blue-400">
-          <div className="bg-transparent-blue/60 text-center rounded-[2px]">Total Cases</div>
-          <p className="text-center p-10 text-3xl font-bold">2300</p>
-        </div> */}
         <div className="h-36 w-36 bg-white text-main-blue mt-20 rounded-[10px] shadow-md hover:shadow-blue-400">
           <div className="bg-transparent-blue/60 text-center  rounded-[2px]">Pending Approval</div>
           <p className="text-center p-10 text-3xl font-bold">{pendingCasesCount}</p>
@@ -101,7 +91,7 @@ const handleAddFile = (fileData) => {
       <AddFileModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        onAddFile={handleAddFile}
+        scenario={"subsequent"}
       />
 
     </div>

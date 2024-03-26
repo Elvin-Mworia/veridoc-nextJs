@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios"
 
-function AddFileModal({ isOpen, onClose, onAddFile}) {
-  const {role}=useSelector((state) => state.userInfo);
+
+function AddFileModal({ isOpen, onClose,scenario}) {
+  let courtstation;
+  const {role,walletAddress}=useSelector((state) => state.userInfo);
+  if(role==="staff"){
+    const {station}=useSelector((state) => state.staffStation);
+    courtstation=station;
+  }
   const [fileData, setFileData] = useState({
     fileType: "",
     caption: "",
-    uploadDate: "", // You might want to auto-generate this based on the file upload timestamp
     file: null,
     caseId:""
   });
@@ -23,10 +29,21 @@ function AddFileModal({ isOpen, onClose, onAddFile}) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    onAddFile(fileData);
+    // onAddFile(fileData);
+    if(scenario==="subsequent" && role==="staff"){
+   let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtstation,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
+    'Content-Type': 'multipart/form-data'
+  }})
+  if(res.status!==200){
+    alert(res.data.message);
+  }else{
+    alert(res.data.message);
+  }
+    }
     onClose();
+    setFileData({ fileType:"",caption:"",file:null,caseId:""})
   };
 
   if (!isOpen) return null;
@@ -51,15 +68,15 @@ function AddFileModal({ isOpen, onClose, onAddFile}) {
               required
             >
               {role==="staff"?<> <option value="">Select a file type</option>
-              <option value="petition">Judgement</option>
-              <option value="motion">Ruling</option>
-              <option value="complaint">Mention</option>
+              <option value="Judgement">Judgement</option>
+              <option value="Ruling">Ruling</option>
+              <option value="Mention">Mention</option>
             </>:<>
               <option value="">Select a file type</option>
-              <option value="petition">Petition</option>
-              <option value="motion">Motion</option>
-              <option value="complaint">Complaint</option>
-              <option value="affidavit">Affidavit</option>
+              <option value="Petition">Petition</option>
+              <option value="Motion">Motion</option>
+              <option value="Complaint">Complaint</option>
+              <option value="Affidavit">Affidavit</option>
               <option value="other">Other</option>
               </>}
             
@@ -67,15 +84,15 @@ function AddFileModal({ isOpen, onClose, onAddFile}) {
           </div>
 {role==="staff" ? <>  <div>
             <label
-              htmlFor="caption"
+              htmlFor="caseId"
               className="block text-main-blue font-semibold"
             >
               Case Id
             </label>
             <input
               type="text"
-              name="caption"
-              id="caption"
+              name="caseId"
+              id="caseId"
               value={fileData.caseId}
               onChange={handleInputChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
