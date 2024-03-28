@@ -91,7 +91,7 @@ useEffect(()=>{
             </thead>
             <tbody className="border border-main-blue">
               {files.length>0 ? files.map((file,key)=>{
-                getCourtName(file.stationId)
+                // getCourtName(file.stationId)
              
                 return(
                   <>
@@ -99,7 +99,7 @@ useEffect(()=>{
                 <td class="whitespace-nowrap px-6 py-4 font-medium">
                   {file.caseId}
                 </td>
-                <td class="whitespace-nowrap px-6 py-4">{courtName}</td>
+                <td class="whitespace-nowrap px-6 py-4">{file.courtName}</td>
                 <td class="whitespace-nowrap px-6 py-4">{file.status}</td>
                 <td class="whitespace-nowrap px-6 py-4"><a class="underline  hover:text-red-900">{file.txId}</a></td>
                
