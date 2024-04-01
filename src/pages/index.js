@@ -48,7 +48,7 @@ export default function Home() {
             router.push( "/admin/dashboard");
           }
          if(res.data.role=="normalUser"){
-            router.push( "/dashboard");
+            router.push( "/user/dashboard");
           }
      
         }
