@@ -1,9 +1,11 @@
 import Layout from "@/components/layout";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 import { useEffect,useState} from "react";
 import axios from "axios"
 import dayjs from "dayjs"
 import AddFileModal from "@/components/AddFileModal";
+import Link from "next/link";
+import { updateCaseId } from "../../../store/caseSlice/caseId";
 
 export default function Dashboard() {
   const {walletAddress}=useSelector((state)=>state.userInfo)
@@ -13,6 +15,7 @@ export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const dispatch=useDispatch();
 
 async function fetchPendingApproval(){
     let res=await axios.post("http://127.0.0.1:5001/cases/getpendingfiles",{walletAddress,station})
@@ -28,7 +31,7 @@ function unixToDate(timestamp){
     fetchPendingApproval();
   },[])
   return (
-    <div className=" flex p-3 mt-10">
+    <div className=" flex  p-3 mt-10">
       {/* Table Section */}
       <div className="w-3/4 mx-auto mt-1">
         <h1 className="text-2xl font-bold text-main-blue mb-10">
@@ -56,9 +59,12 @@ function unixToDate(timestamp){
               return(
                 <>
                  <tr class="text-main-blue">
-              <td class="border border-main-blue whitespace-nowrap px-6 py-4 font-medium">
-                {file.caseId}
+                 
+                  <td class="border border-main-blue whitespace-nowrap px-6 py-4 font-medium">
+              <Link href={`/staff/case/${file.caseId}`} onClick={()=>dispatch(updateCaseId({caseId:file.caseId}))}>   {file.caseId}  </Link>
+             
               </td>
+                
               <td class="border border-main-blue whitespace-nowrap px-6 py-4">
                 {unixToDate(file.date)}
               </td>

@@ -1,20 +1,18 @@
 "use client"
 import Layout from "@/components/layout";
 import Query from "@irys/query";
-import { useSelector} from "react-redux";
+import { useSelector,useDispatch} from "react-redux";
 import {useState,useEffect} from "react"
 import axios from "axios";
-import AddFileModal from "@/components/AddFileModal";
-
+import Link from "next/link"
+import { updateCaseId } from "../../../store/caseSlice/caseId";
+//u
 export default function Dashboard() {
   const {walletAddress}=useSelector((state)=>(state.userInfo))
   const [files,setFiles]=useState([]);
   const [pending,setPending]=useState([])
   const [courtName,setCourtName]=useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
+  const dispatch=useDispatch();
   const myQuery=new Query();
  async function getUserFiles(walletAddress){
   let res=await myQuery.search("irys:transactions")
@@ -67,9 +65,8 @@ useEffect(()=>{
         >
           File New Case
         </a>
-
       </div>
-      <div className="flex mt-8"> 
+      <div className="flex mt-8">
         {/* Table Section */}
         <div className="w-3/4">
           <table class="min-w-full text-left text-sm font-light">
@@ -91,15 +88,16 @@ useEffect(()=>{
             </thead>
             <tbody className="border border-main-blue">
               {files.length>0 ? files.map((file,key)=>{
-                // getCourtName(file.stationId)
+                getCourtName(file.stationId)
              
                 return(
                   <>
                    <tr class="text-main-blue">
-                <td class="whitespace-nowrap px-6 py-4 font-medium">
-                  {file.caseId}
+               <Link href={`/user/case/${file.caseId}`} onClick={()=>dispatch(updateCaseId({caseId:file.caseId}))}><td class="whitespace-nowrap px-6 py-4 font-medium">
+                 {file.caseId}
                 </td>
-                <td class="whitespace-nowrap px-6 py-4">{file.courtName}</td>
+                </Link> 
+                <td class="whitespace-nowrap px-6 py-4">{courtName}</td>
                 <td class="whitespace-nowrap px-6 py-4">{file.status}</td>
                 <td class="whitespace-nowrap px-6 py-4"><a class="underline  hover:text-red-900">{file.txId}</a></td>
                
@@ -117,32 +115,14 @@ useEffect(()=>{
             <p className="text-center h-8 text-white bg-secondary-blue">
               Cases
             </p>
-            <p className="p-2 text-center">{files.length} case filed</p>
+            <p className="p-2 text-center">{files.length} cases filed</p>
           </div>
-          <div className="h-34 w-28 shadow m-3">
-            <p className="text-center h-14 text-white bg-secondary-blue">
-              Pending Approval
+          <div className="h-28 w-28 shadow m-3">
+            <p className="text-center h-8 text-white bg-secondary-blue">
+              Cases
             </p>
-            <p className="p-2 text-center">{pending.length} pending case</p>
+            <p className="p-2 text-center">{pending.length} pending cases</p>
           </div>
-          {files.length>0?  <button
-        onClick={openModal}
-          className="bg-main-blue text-white mt-10 px-3 py-2 rounded-lg"
-        >
-          Upload subsequent File
-        </button>:  <button
-        disabled
-          className="bg-blue-300  text-white mt-10 px-3 py-2 rounded-lg"
-        >
-          Upload subsequent File
-        </button>}
-      
-        <AddFileModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        scenario={"subsequent"}
-        userfiles={files}
-      />
         </div>
       </div>
     </div>
