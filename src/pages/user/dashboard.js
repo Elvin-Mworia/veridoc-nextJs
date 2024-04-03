@@ -1,16 +1,18 @@
 "use client"
 import Layout from "@/components/layout";
 import Query from "@irys/query";
-import { useSelector} from "react-redux";
+import { useSelector,useDispatch} from "react-redux";
 import {useState,useEffect} from "react"
 import axios from "axios";
 import Link from "next/link"
+import { updateCaseId } from "../../../store/caseSlice/caseId";
+
 export default function Dashboard() {
   const {walletAddress}=useSelector((state)=>(state.userInfo))
   const [files,setFiles]=useState([]);
   const [pending,setPending]=useState([])
   const [courtName,setCourtName]=useState("");
-
+  const dispatch=useDispatch();
   const myQuery=new Query();
  async function getUserFiles(walletAddress){
   let res=await myQuery.search("irys:transactions")
@@ -91,7 +93,7 @@ useEffect(()=>{
                 return(
                   <>
                    <tr class="text-main-blue">
-               <Link href={`/user/case/${file.caseId}`}><td class="whitespace-nowrap px-6 py-4 font-medium">
+               <Link href={`/user/case/${file.caseId}`} onClick={()=>dispatch(updateCaseId({caseId:file.caseId}))}><td class="whitespace-nowrap px-6 py-4 font-medium">
                  {file.caseId}
                 </td>
                 </Link> 
