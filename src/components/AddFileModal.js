@@ -1,15 +1,35 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios"
 
-function AddFileModal({ isOpen, onClose, onAddFile}) {
-  const {role}=useSelector((state) => state.userInfo);
+
+function AddFileModal({ isOpen, onClose,scenario,userfiles}) {
+  let courtstation;
+  const {role,walletAddress}=useSelector((state) => state.userInfo);
   const [fileData, setFileData] = useState({
     fileType: "",
     caption: "",
-    uploadDate: "", // You might want to auto-generate this based on the file upload timestamp
     file: null,
     caseId:""
   });
+  const [courtName,setCourtName]=useState("");
+  if(role==="staff"){
+    const {station}=useSelector((state) => state.staffStation);
+    courtstation=station;
+  }
+ 
+  //get the name of a court provided is stationId
+ function getCourtName(stationId){
+  axios.post("http://localhost:5001/station/getStation",{stationId}).then(res=>{
+    if(res.status===200){  
+      setCourtName(res.data.message);
+      }
+  }).catch((err)=>{
+    console.log(err);
+  })
+
+ }
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,10 +43,31 @@ function AddFileModal({ isOpen, onClose, onAddFile}) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    onAddFile(fileData);
+    let res;
+    // onAddFile(fileData);
+    if(scenario==="subsequent" && role==="staff"){
+   res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtstation,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
+    'Content-Type': 'multipart/form-data'
+  }})
+}
+  if(scenario==="subsequent" && role==="normalUser"){
+    let file=userfiles.filter(x=>x.caseId===fileData.caseId);
+    console.log(file);
+    getCourtName(file[0].stationId);
+    res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtName,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
+     'Content-Type': 'multipart/form-data'
+   }})
+  }
+  if(res.status!==200){
+    alert(res.data.message);
+  }else{
+    alert(res.data.message);
+  }
+    
     onClose();
+    setFileData({ fileType:"",caption:"",file:null,caseId:""})
   };
 
   if (!isOpen) return null;
@@ -51,15 +92,17 @@ function AddFileModal({ isOpen, onClose, onAddFile}) {
               required
             >
               {role==="staff"?<> <option value="">Select a file type</option>
-              <option value="petition">Judgement</option>
-              <option value="motion">Ruling</option>
-              <option value="complaint">Mention</option>
+              <option value="Judgement">Judgement</option>
+              <option value="Ruling">Ruling</option>
+              <option value="Mention">Mention</option>
             </>:<>
               <option value="">Select a file type</option>
-              <option value="petition">Petition</option>
-              <option value="motion">Motion</option>
-              <option value="complaint">Complaint</option>
-              <option value="affidavit">Affidavit</option>
+              <option value="Petition">Petition</option>
+              <option value="Motion">Motion</option>
+              <option value="Complaint">Complaint</option>
+              <option value="Reply">Reply</option>
+              <option value="Affidavit">Affidavit</option>
+              <option value="Support Affidavit">Further Supporting Affidavit</option>
               <option value="other">Other</option>
               </>}
             
@@ -67,22 +110,45 @@ function AddFileModal({ isOpen, onClose, onAddFile}) {
           </div>
 {role==="staff" ? <>  <div>
             <label
-              htmlFor="caption"
+              htmlFor="caseId"
               className="block text-main-blue font-semibold"
             >
               Case Id
             </label>
             <input
               type="text"
-              name="caption"
-              id="caption"
+              name="caseId"
+              id="caseId"
               value={fileData.caseId}
               onChange={handleInputChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               required
             />
           </div>
-</> :<>  </>}
+</> :<>{scenario==="subsequent"? <><label
+              htmlFor="caseId"
+              className="block text-main-blue font-semibold"
+            >
+              Case Id
+            </label>
+<select
+              name="caseId"
+              id="caseId"
+              value={fileData.caseId}
+              onChange={handleInputChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              required
+            ><option value="">Select a case</option>
+               {
+          userfiles.length>0?userfiles.map((file,index)=>{
+                return(
+                  <>
+                   <option value={file.caseId}>{file.caseId}</option>
+                  </>
+                )
+              }): <option value="">No cases</option>
+            }
+            </select></>:<></>}  </>}
           <div>
             <label
               htmlFor="caption"
@@ -138,5 +204,6 @@ function AddFileModal({ isOpen, onClose, onAddFile}) {
     </div>
   );
 }
+
 
 export default AddFileModal;
