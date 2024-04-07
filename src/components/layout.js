@@ -4,6 +4,7 @@ import { useSelector,useDispatch} from "react-redux";
 import { useState, useEffect } from 'react';
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import {updateuserinfo} from "../../store/userSlice/userInfo";
+import Template from "./template";
 export default function Layout({ children }) {
  const router = useRouter()
  const dispatch=useDispatch()
@@ -57,7 +58,7 @@ export default function Layout({ children }) {
         </a>
       </div>
 
-      <main className="px-6">{children}</main>
+      <Template className="px-6" >{children}</Template>
     </div>
   );
 }
