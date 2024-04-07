@@ -6,14 +6,15 @@ import {useState,useEffect} from "react"
 import axios from "axios";
 import Link from "next/link"
 import { updateCaseId } from "../../../store/caseSlice/caseId";
-//u
+
 export default function Dashboard() {
   const {walletAddress}=useSelector((state)=>(state.userInfo))
   const [files,setFiles]=useState([]);
   const [pending,setPending]=useState([])
-  const [courtName,setCourtName]=useState("");
+  const [courtName,setCourtName]=useState([]);
   const dispatch=useDispatch();
   const myQuery=new Query();
+  const courtNameMap=new Map()
  async function getUserFiles(walletAddress){
   let res=await myQuery.search("irys:transactions")
 	.tags([{ name: "Content-Type", values: ["application/pdf","application/epub+zip"] },
@@ -29,6 +30,7 @@ export default function Dashboard() {
     if(res.status===200){  
       setFiles(res.data.message);
     let pendingFiles=res.data.message.filter((file)=>file.status==="pending");
+
     console.log(pendingFiles.length)
     setPending(pendingFiles);
       }
@@ -36,18 +38,6 @@ export default function Dashboard() {
     console.log(err);
   })
  }
-//get the name of a court provided is stationId
- function getCourtName(stationId){
-  axios.post("http://localhost:5001/station/getStation",{stationId}).then(res=>{
-    if(res.status===200){  
-      setCourtName(res.data.message);
-      }
-  }).catch((err)=>{
-    console.log(err);
-  })
-
- }
-
 useEffect(()=>{
  // getUserFiles(walletAddress);
  // getUserPendingFiles("d6KpB0ztMhjMnC9fuE3lp");
@@ -87,9 +77,7 @@ useEffect(()=>{
               </tr>
             </thead>
             <tbody className="border border-main-blue">
-              {files.length>0 ? files.map((file,key)=>{
-                getCourtName(file.stationId)
-             
+              {files.length>0 ? files.map((file,index)=>{
                 return(
                   <>
                    <tr class="text-main-blue">
@@ -97,7 +85,7 @@ useEffect(()=>{
                  {file.caseId}
                 </td>
                 </Link> 
-                <td class="whitespace-nowrap px-6 py-4">{courtName}</td>
+                <td class="whitespace-nowrap px-6 py-4">{file.courtName}</td>
                 <td class="whitespace-nowrap px-6 py-4">{file.status}</td>
                 <td class="whitespace-nowrap px-6 py-4"><a class="underline  hover:text-red-900">{file.txId}</a></td>
                
