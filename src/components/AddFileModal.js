@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import axios from "axios"
+import {updateFile} from "../../store/fileSlice/file"
 
 
-function AddFileModal({ isOpen, onClose,scenario,userfiles}) {
+function AddFileModal({ isOpen, onClose,onAddFile,scenario,userfiles}) {
   let courtstation;
   const {role,walletAddress}=useSelector((state) => state.userInfo);
+  const dispatch=useDispatch()
   const [fileData, setFileData] = useState({
     fileType: "",
     caption: "",
@@ -34,6 +36,7 @@ function AddFileModal({ isOpen, onClose,scenario,userfiles}) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFileData({ ...fileData, [name]: value });
+ 
   };
 
   const handleFileChange = (e) => {
@@ -41,33 +44,42 @@ function AddFileModal({ isOpen, onClose,scenario,userfiles}) {
       ...fileData,
       file: e.target.files[0],
     });
+    dispatch(updateFile({file:e.target.files[0]}))
   };
 
   const handleSubmit =async (e) => {
     e.preventDefault();
-    let res;
-    // onAddFile(fileData);
+  
+    onAddFile(fileData);
     if(scenario==="subsequent" && role==="staff"){
-   res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtstation,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
+  let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtstation,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
     'Content-Type': 'multipart/form-data'
   }})
+  if(res.status!==200){
+    alert(res.data.message);
+  }else{
+    alert(res.data.message);
+    setFileData({ fileType:"",caption:"",file:null,caseId:""})
+  }
 }
   if(scenario==="subsequent" && role==="normalUser"){
     let file=userfiles.filter(x=>x.caseId===fileData.caseId);
     console.log(file);
     getCourtName(file[0].stationId);
-    res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtName,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
+   let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtName,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
      'Content-Type': 'multipart/form-data'
    }})
-  }
-  if(res.status!==200){
+   if(res.status!==200){
     alert(res.data.message);
   }else{
     alert(res.data.message);
-  }
-    
-    onClose();
     setFileData({ fileType:"",caption:"",file:null,caseId:""})
+  }   
+  }
+  if (scenario==="newcase"){
+
+  }
+  onClose();
   };
 
   if (!isOpen) return null;
@@ -192,12 +204,20 @@ function AddFileModal({ isOpen, onClose,scenario,userfiles}) {
             >
               Cancel
             </button>
-            <button
+            {
+              scenario==="newcase" ? <button onClick={(e)=>{handleSubmit(e)}}
+              className="bg-main-blue text-white px-4 py-2 rounded hover:bg-main-blue-dark"
+            >
+              Upload File
+            </button> :
+              <button
               type="submit"
               className="bg-main-blue text-white px-4 py-2 rounded hover:bg-main-blue-dark"
             >
               Upload File
             </button>
+            }
+           
           </div>
         </form>
       </div>
