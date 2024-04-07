@@ -11,7 +11,7 @@ import CaseRankSlice  from   "./caseSlice/caseRank";
 import CaseDivisionSlice  from   "./caseSlice/caseDivision";
 import StaffStationSlice from "./userSlice/staffStation"
 import CaseIdSlice from './caseSlice/caseId';
-
+import FileSlice from  "./fileSlice/file";
 const persistConfig = {
   key: 'root',
   storage,
@@ -25,7 +25,8 @@ const rootReducer=combineReducers({
   rank:CaseRankSlice,
   division:CaseDivisionSlice,
   staffStation:StaffStationSlice,
-  caseId:CaseIdSlice
+  caseId:CaseIdSlice,
+  file:FileSlice
 
   })
 const persistedReducer = persistReducer(persistConfig, rootReducer)
