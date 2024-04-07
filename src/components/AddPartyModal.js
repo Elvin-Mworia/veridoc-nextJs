@@ -67,10 +67,10 @@ export default function AddPartyModal({ isOpen, onClose, onAddParty }) {
             required
           >
             <option value="">Select Party Type</option>
-            <option value="1st Plaintiff">1st Plaintiff</option>
-            <option value="1st Respondent">1st Respondent</option>
-            <option value="2nd Plaintiff">2nd Plaintiff</option>
-            <option value="2nd Respondent">2nd Respondent</option>
+            <option value="applicant">1st Plaintiff</option>
+            <option value="respodent">1st Respondent</option>
+            <option value="applicant">2nd Plaintiff</option>
+            <option value="respodent">2nd Respondent</option>
             {/* Add other party types as needed */}
           </select>
         </div>
