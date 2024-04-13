@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
 import axios from "axios"
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import MpesaModal from "./mpesaModal";
 export default function StepFive({ prevStep, formData}) {
   const {courtRank}=useSelector((state)=>(state.rank))
   const {courtStation}=useSelector((state)=>(state.station))
@@ -8,19 +10,21 @@ export default function StepFive({ prevStep, formData}) {
   const {walletAddress}=useSelector((state)=>(state.userInfo))
   const {file}=useSelector((state)=>(state.file))
   const router=useRouter();
+  const [isAdminModalOpen, setAdminModalOpen] = useState(false);
  async function handleSubmit(e){
     e.preventDefault()
-  let  applicant=formData.parties.filter((party)=>party.partyType==="applicant")
-  let  respodent=formData.parties.filter((party)=>party.partyType==="respodent")
-    let res= await axios.post("http://127.0.0.1:5001/cases/add",{walletAddress,station:courtStation,file:file,applicant,respodent},{headers: {
-      'Content-Type': 'multipart/form-data'
-    }})
-    if(res.status!==200){
-      alert(res.data.message);
-    }else{
-      alert("Case filed succefully")
-      router.push("/user/dashboard")
-    }
+    setAdminModalOpen(true);
+  // let  applicant=formData.parties.filter((party)=>party.partyType==="applicant")
+  // let  respodent=formData.parties.filter((party)=>party.partyType==="respodent")
+  //   let res= await axios.post("http://127.0.0.1:5001/cases/add",{walletAddress,station:courtStation,file:file,applicant,respodent},{headers: {
+  //     'Content-Type': 'multipart/form-data'
+  //   }})
+  //   if(res.status!==200){
+  //     alert(res.data.message);
+  //   }else{
+  //     alert("Case filed succefully")
+  //     router.push("/user/dashboard")
+  //   }
   }
   return (
     <div className="p-10">
@@ -115,6 +119,9 @@ export default function StepFive({ prevStep, formData}) {
         >
           Complete Submission
         </button>
+<MpesaModal
+     isOpen={isAdminModalOpen}
+     onClose={() => setAdminModalOpen(false)}/>
       </div>
     </div>
   );
