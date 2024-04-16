@@ -5,6 +5,7 @@ import { useEffect,useState} from "react";
 import axios from "axios"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 
 
 export default function CaseForUser(){
@@ -74,7 +75,9 @@ export default function CaseForUser(){
           </thead>
           <tbody>
                 <tr className="border-b">
-                <td className="px-6 py-2">{file?.txId}</td>
+                {/* <td className="px-6 py-2">{file?.txId}</td> */}
+                <td class="whitespace-nowrap px-6 py-2"><Link className="text-main-blue text-center underline p-1  hover:text-red-900" href={`https://arweave.net/${file?.txId}`} target="_blank">{file?.txId}</Link></td>
+
                   <td className="px-6 py-2">{unixToDate(file?.date)}</td>
                 </tr>
           </tbody>

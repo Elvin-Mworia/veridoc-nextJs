@@ -87,7 +87,9 @@ useEffect(()=>{
                 </Link> 
                 <td class="whitespace-nowrap px-6 py-4">{file.courtName}</td>
                 <td class="whitespace-nowrap px-6 py-4">{file.status}</td>
-                <td class="whitespace-nowrap px-6 py-4"><a class="underline  hover:text-red-900">{file.txId}</a></td>
+                {/* <td class="whitespace-nowrap px-6 py-4"><a class="underline  hover:text-red-900">{file.txId}</a></td> */}
+                <td class="whitespace-nowrap px-6 py-4"><Link className="text-main-blue text-center underline p-1  hover:text-red-900" href={`https://arweave.net/${file.txId}`} target="_blank">{file.txId}</Link></td>
+
                
               </tr>
                   </>
