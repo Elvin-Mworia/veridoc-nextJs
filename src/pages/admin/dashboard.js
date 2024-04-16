@@ -58,11 +58,11 @@ getTransactions();
   return (
     <div className="p-3 mt-10 flex items-start justify-around">
       {/* Folders Card */}
-      <div className="w-64 min-h-fit bg-white  mx-4">
-        <div className="bg-transparent-blue/60 text-center text-main-blue p-2 font-bold">
+      <div className="w-64  h-64 bg-white  mx-4">
+        <div className="bg-transparent-blue/60 text-center text-main-blue p-2 top-0 font-bold">
           Folders
         </div>
-        <div className="">
+        <div className="overflow-y-auto h-48">
           {folders.map((folder, index) => (
             <p
               key={index}
@@ -101,11 +101,11 @@ getTransactions();
       </div>
 
       {/* Admins Card */}
-      <div className="w-fit bg-white  mx-4 min-h-fit">
+      <div className="w-fit bg-white  mx-4 h-64">
         <div className="bg-transparent-blue/60 text-center text-main-blue p-2 font-bold">
           Admins
         </div>
-        <div className="">
+        <div className="overflow-y-auto h-48">
           {admins.map((admin, index) => (
             <div
               key={index}
@@ -145,11 +145,11 @@ getTransactions();
       </div>
 
       {/* Transactions Card */}
-      <div className="w-64 bg-white  mx-4 min-h-fit">
+      <div className="w-64 bg-white  mx-4 h-64">
         <div className="bg-transparent-blue/60 text-center text-main-blue p-2 font-bold">
           Transactions
         </div>
-        <div className="">
+        <div className="h-48 overflow-y-auto">
           {transactions.map((transaction, index) => (
             <div key={index} className="w-fit mx-auto rounded-lg p-1 text-white text-center m-1">
               <Link className="text-main-blue text-center p-1  hover:text-red-900" href={`https://viewblock.io/arweave/tx/${transaction.txId}`} target="_blank">{transaction.txId.slice(0,20)}</Link>
