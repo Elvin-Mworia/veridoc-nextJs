@@ -4,16 +4,14 @@ import AddAdminModal from "@/components/AddAdminModal";
 import Layout from "@/components/layout";
 import { useState,useEffect } from "react";
 import axios from 'axios'
+import Link from "next/link"
 
 export default function Dashboard() {
   const [isFolderModalOpen, setFolderModalOpen] = useState(false);
   const [isAdminModalOpen, setAdminModalOpen] = useState(false);
   const [folders, setFolders] = useState([]); // Initial folders list
   const [admins, setAdmins] = useState([]);
-  const [transactions, setTransactions] = useState([
-    "23423423432432423",
-    "324324g34h3k4hl3423",
-  ]);
+  const [transactions, setTransactions] = useState([]);
 
   async function getFoldersAndAdmins(){
     let folder=await axios.get("http://127.0.0.1:5001/station/getAllStationFolders");
@@ -25,8 +23,21 @@ export default function Dashboard() {
 
   }
 
+  async function getTransactions(){
+let res= await axios.get("http://127.0.0.1:5001/transaction/")
+if(res.status===200){
+  setTransactions(res.data.message);
+}
+  }
+//   useEffect(()=>{
+//     const interval=setInterval(() => getTransactions(),30000);
+// getFoldersAndAdmins();
+// return () => clearInterval(interval);
+//   },[transactions])
   useEffect(()=>{
+
 getFoldersAndAdmins();
+getTransactions();
   },[])
 
   const addFolder = (e) => {
@@ -140,8 +151,8 @@ getFoldersAndAdmins();
         </div>
         <div className="">
           {transactions.map((transaction, index) => (
-            <div key={index} className="">
-              <p className="text-main-blue text-center p-2">{transaction}</p>
+            <div key={index} className="w-fit mx-auto rounded-lg p-1 text-white text-center m-1">
+              <Link className="text-main-blue text-center p-1  hover:text-red-900" href={`https://viewblock.io/arweave/tx/${transaction.txId}`} target="_blank">{transaction.txId.slice(0,20)}</Link>
             </div>
           ))}
         </div>

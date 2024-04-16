@@ -4,9 +4,26 @@ import axios from "axios";
 export default function AddFolderModal({ isOpen, onClose }) {
   if (!isOpen) return null;
   const [name,setFolder]=useState("");
-async function handleSubmit(){
-await axios.post("http://127.0.0.1:5001/folders/addFolder",{name});
-setFolder("")
+async function handleSubmit(e){
+  e.preventDefault()
+  try{
+let res=await axios.post("http://127.0.0.1:5001/folders/addFolder",{name});
+if(res.status===200){
+  setFolder("")
+  alert(res.data.message);
+  onClose();
+  
+}
+  }catch(err){
+    console.log(err)
+    // alert(err.response.data.message);
+    if(err.response?.request?.status==400){
+      alert(err.response?.data?.message);
+    }
+   
+  }
+    onClose();
+    window.location.reload();
 }
 
   return (
@@ -15,10 +32,6 @@ setFolder("")
         <h1 className="text-2xl text-center font-bold mb-5">Add Folder</h1>
         <p className="text-amber-500 text-center p-2 text-xs">The folder name should match with court station name!</p>
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
         >
           <label
             htmlFor="folderName"
@@ -43,9 +56,9 @@ setFolder("")
               Cancel
             </button>
             <button
-              type="submit"
+            type="button"
               className="py-2 px-4 bg-main-blue text-white rounded hover:bg-blue-700"
-              onClick={onClose}
+              onClick={(e)=>{handleSubmit(e)}}
             >
               Add
             </button>
