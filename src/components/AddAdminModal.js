@@ -5,7 +5,21 @@ export default function AddAdminModal({ isOpen, onClose}) {
   if (!isOpen) return null;
 const [walletAddress,setWalletAddress]=useState("");
 async function handleSubmit(){
-await axios.post("http://127.0.0.1:5001/users/l0",{walletAddress});
+
+  try{
+  const res=await axios.post("http://127.0.0.1:5001/users/l0",{walletAddress});
+  if(res.status===200){
+    alert(res.data.message); 
+  }
+  }catch(err){
+    console.log(err)
+  //  alert(err.response.data.message)
+    if(err.response?.request?.status==400){
+      alert(err.response.data.message);
+    }
+  }
+  onClose();
+  window.location.reload();
 }
 
   return (
