@@ -15,6 +15,7 @@ export default function StepFive({ prevStep, formData}) {
   const router=useRouter();
   const dispatch=useDispatch();
   const [isAdminModalOpen, setAdminModalOpen] = useState(false);
+  const [processing,setProcessing]=useState(false)
    
   //for showing the lipa na mpesa online modal
   function handlePayment(){
@@ -23,6 +24,7 @@ export default function StepFive({ prevStep, formData}) {
  async function handleSubmit(e){
     e.preventDefault()
    //setAdminModalOpen(true);
+   setProcessing(true)
   let  applicant=formData.parties.filter((party)=>party.partyType==="applicant")
   let  respodent=formData.parties.filter((party)=>party.partyType==="respodent")
     let res= await axios.post("http://127.0.0.1:5001/cases/add",{walletAddress,station:courtStation,file:file,applicant,respodent},{headers: {
@@ -31,6 +33,7 @@ export default function StepFive({ prevStep, formData}) {
     if(res.status!==200){
       alert(res.data.message);
     }else{
+      setProcessing(false)
       alert("Case filed succefully")
       dispatch(updatePayment({paid:false}))
       router.push("/user/dashboard")
@@ -162,6 +165,9 @@ export default function StepFive({ prevStep, formData}) {
      isOpen={isAdminModalOpen}
      onClose={() => setAdminModalOpen(false)}/>
       </div>
+      {
+        processing===true ? <Loading placeholder={"Uploading..."}/>:<></>
+      }
     </div>
   );
 }
