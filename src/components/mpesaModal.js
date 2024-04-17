@@ -90,7 +90,7 @@ if(res.status===200){
         </form>
       </div>
       {
-        processing===true ? <Loading/>:<></>
+        processing===true ? <Loading placeholder={"Processing..."}/>:<></>
       }
     </div>
   );
