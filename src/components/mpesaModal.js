@@ -3,17 +3,27 @@ import axios from "axios";
 import {useState} from "react";
 import {useDispatch} from "react-redux"
 import { updatePayment } from "../../store/paymentSlice/payment";
+import Loading from "@/components/loadingOverlay"
 export default function MpesaModal({ isOpen, onClose}) {
  const dispatch=useDispatch()
   if (!isOpen) return null;
 const [phone,setPhone]=useState("");
+const [processing,setProcessing]=useState(false)
 async function handleSubmit(){
-    let amount="75"
+  try{
+    let amount="1"
+    setProcessing(true);
 let res=await axios.post("http://127.0.0.1:5001/mpesa-online/",{phone,amount});
 if(res.status===200){
     dispatch(updatePayment({paid:true}))
+    setProcessing(false);
+    onClose();
 }
 
+  }catch(err){
+    console.log(err);
+  }
+ 
 }
 
   return (
@@ -74,6 +84,9 @@ if(res.status===200){
           </div>
         </form>
       </div>
+      {
+        processing===true ? <Loading/>:<></>
+      }
     </div>
   );
 }
