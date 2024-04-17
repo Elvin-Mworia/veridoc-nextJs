@@ -32,7 +32,7 @@ export default function StepFive({ prevStep, formData}) {
       alert(res.data.message);
     }else{
       alert("Case filed succefully")
-      dispatch(updatePayment({paid:true}))
+      dispatch(updatePayment({paid:false}))
       router.push("/user/dashboard")
     }
   }
