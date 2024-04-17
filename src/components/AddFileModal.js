@@ -78,12 +78,12 @@ function AddFileModal({ isOpen, onClose,onAddFile,scenario,userfiles}) {
       }   
       }
       if (scenario==="newcase"){
-    
+        onAddFile(fileData);
       }
   }catch(err){
     console.log(err)
   }
-   // onAddFile(fileData);
+   
  
   onClose();
   };
