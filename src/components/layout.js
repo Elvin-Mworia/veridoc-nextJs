@@ -4,6 +4,7 @@ import { useSelector,useDispatch} from "react-redux";
 import { useState, useEffect } from 'react';
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import {updateuserinfo} from "../../store/userSlice/userInfo";
+import { updatePayment } from "../../store/paymentSlice/payment";
 import Template from "./template";
 export default function Layout({ children }) {
  const router = useRouter()
@@ -30,6 +31,7 @@ export default function Layout({ children }) {
   async function handleDisConnect() {
     dispatch(updateLoginState({loginStatus:false}));
     dispatch(updateuserinfo({walletAddress:"",name:"",role:""}));
+    dispatch(updatePayment({paid:false}))
     const res = await  othent.disconnect();
     console.log("Disconnect,\n", res);
   };
