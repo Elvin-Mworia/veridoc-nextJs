@@ -16,6 +16,14 @@ export default function Dashboard() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const dispatch=useDispatch();
+  const [formData, setFormData] = useState({
+  
+    files: [],
+  });
+  const handleAddFile = (fileData) => {
+    const updatedFiles = [...formData.files, fileData]; // Assuming `files` field in your formData
+    setFormData({ ...formData, files: updatedFiles });
+  };
 
 async function fetchPendingApproval(){
     let res=await axios.post("http://127.0.0.1:5001/cases/getpendingfiles",{walletAddress,station})
@@ -55,7 +63,7 @@ function unixToDate(timestamp){
             </tr>
           </thead>
           <tbody className="bg-white border border-main-blue">
-            {pendingApproval.length>0 ? pendingApproval.map((file,index)=>{
+            {pendingApproval?.length>0 ? pendingApproval.map((file,index)=>{
               return(
                 <>
                  <tr class="text-main-blue">
@@ -98,6 +106,7 @@ function unixToDate(timestamp){
         isOpen={isModalOpen}
         onClose={closeModal}
         scenario={"subsequent"}
+        onAddFile={handleAddFile}
       />
 
     </div>

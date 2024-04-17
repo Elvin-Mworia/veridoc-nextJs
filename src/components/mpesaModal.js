@@ -9,11 +9,16 @@ export default function MpesaModal({ isOpen, onClose}) {
   if (!isOpen) return null;
 const [phone,setPhone]=useState("");
 const [processing,setProcessing]=useState(false)
+function sleep(milliseconds) {  
+  return new Promise(resolve => setTimeout(resolve, milliseconds));  
+}  
 async function handleSubmit(){
   try{
     let amount="1"
     setProcessing(true);
+    await sleep(4000);
 let res=await axios.post("http://127.0.0.1:5001/mpesa-online/",{phone,amount});
+await sleep(10000);
 if(res.status===200){
     dispatch(updatePayment({paid:true}))
     setProcessing(false);

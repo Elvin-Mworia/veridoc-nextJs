@@ -1,30 +1,40 @@
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import axios from "axios"
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import MpesaModal from "./mpesaModal";
+import Loading from "@/components/loadingOverlay"
+import { updatePayment } from "../../store/paymentSlice/payment";
 export default function StepFive({ prevStep, formData}) {
   const {courtRank}=useSelector((state)=>(state.rank))
   const {courtStation}=useSelector((state)=>(state.station))
   const {courtDivision}=useSelector((state)=>(state.division))
   const {walletAddress}=useSelector((state)=>(state.userInfo))
   const {file}=useSelector((state)=>(state.file))
+  const {paid}=useSelector((state)=>(state.paid))
   const router=useRouter();
+  const dispatch=useDispatch();
   const [isAdminModalOpen, setAdminModalOpen] = useState(false);
+   
+  //for showing the lipa na mpesa online modal
+  function handlePayment(){
+    setAdminModalOpen(true);
+  }
  async function handleSubmit(e){
     e.preventDefault()
-    setAdminModalOpen(true);
-  // let  applicant=formData.parties.filter((party)=>party.partyType==="applicant")
-  // let  respodent=formData.parties.filter((party)=>party.partyType==="respodent")
-  //   let res= await axios.post("http://127.0.0.1:5001/cases/add",{walletAddress,station:courtStation,file:file,applicant,respodent},{headers: {
-  //     'Content-Type': 'multipart/form-data'
-  //   }})
-  //   if(res.status!==200){
-  //     alert(res.data.message);
-  //   }else{
-  //     alert("Case filed succefully")
-  //     router.push("/user/dashboard")
-  //   }
+   //setAdminModalOpen(true);
+  let  applicant=formData.parties.filter((party)=>party.partyType==="applicant")
+  let  respodent=formData.parties.filter((party)=>party.partyType==="respodent")
+    let res= await axios.post("http://127.0.0.1:5001/cases/add",{walletAddress,station:courtStation,file:file,applicant,respodent},{headers: {
+      'Content-Type': 'multipart/form-data'
+    }})
+    if(res.status!==200){
+      alert(res.data.message);
+    }else{
+      alert("Case filed succefully")
+      dispatch(updatePayment({paid:true}))
+      router.push("/user/dashboard")
+    }
   }
   return (
     <div className="p-10">
@@ -113,12 +123,41 @@ export default function StepFive({ prevStep, formData}) {
         >
           Go Back
         </button>
-        <button
-          onClick={(e)=>handleSubmit(e)}
-          className="bg-main-blue text-white font-semibold px-4 py-2 rounded hover:bg-main-blue-dark focus:outline-none focus:ring-2 focus:ring-main-blue focus:ring-opacity-50 transition ease-in-out duration-150"
-        >
-          Complete Submission
-        </button>
+        {
+          paid===false?       <div>
+          
+          <button
+            onClick={()=>handlePayment()}
+            className="bg-main-blue text-white mr-4 font-semibold px-4 py-2 rounded hover:bg-main-blue-dark focus:outline-none focus:ring-2 focus:ring-main-blue focus:ring-opacity-50 transition ease-in-out duration-150"
+          >
+            Pay
+          </button>
+          
+          <button
+            disabled
+            className=" bg-blue-300 text-white font-semibold px-4 py-2 rounded hover:bg-main-blue-dark focus:outline-none focus:ring-2 focus:ring-main-blue focus:ring-opacity-50 transition ease-in-out duration-150"
+          >
+            Complete Submission
+          </button>
+          </div>:
+               <div>
+          
+               <button
+                 disabled
+                 className=" bg-blue-300 text-white mr-4 font-semibold px-4 py-2 rounded hover:bg-main-blue-dark focus:outline-none focus:ring-2 focus:ring-main-blue focus:ring-opacity-50 transition ease-in-out duration-150"
+               >
+                 Pay
+               </button>
+               
+               <button
+                 onClick={(e)=>handleSubmit(e)}
+                
+                 className="bg-main-blue text-white font-semibold px-4 py-2 rounded hover:bg-main-blue-dark focus:outline-none focus:ring-2 focus:ring-main-blue focus:ring-opacity-50 transition ease-in-out duration-150"
+               >
+                 Complete Submission
+               </button>
+               </div>
+        }
 <MpesaModal
      isOpen={isAdminModalOpen}
      onClose={() => setAdminModalOpen(false)}/>
