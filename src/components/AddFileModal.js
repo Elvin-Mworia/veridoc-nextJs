@@ -7,6 +7,7 @@ import {updateFile} from "../../store/fileSlice/file"
 function AddFileModal({ isOpen, onClose,onAddFile,scenario,userfiles}) {
   let courtstation;
   const {role,walletAddress}=useSelector((state) => state.userInfo);
+  const {file}=useSelector((state)=>(state.file))
   const dispatch=useDispatch()
   const [fileData, setFileData] = useState({
     fileType: "",
@@ -48,37 +49,42 @@ function AddFileModal({ isOpen, onClose,onAddFile,scenario,userfiles}) {
   };
 
   const handleSubmit =async (e) => {
-    e.preventDefault();
   
-    onAddFile(fileData);
+    e.preventDefault();
+  try{
     if(scenario==="subsequent" && role==="staff"){
-  let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtstation,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
-    'Content-Type': 'multipart/form-data'
-  }})
-  if(res.status!==200){
-    alert(res.data.message);
-  }else{
-    alert(res.data.message);
-    setFileData({ fileType:"",caption:"",file:null,caseId:""})
+      let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtstation,filetype:fileData.fileType,file:file,caseId:fileData.caseId},{headers: {
+        'Content-Type': 'multipart/form-data'
+      }})
+      if(res.status!==200){
+        alert(res.data.message);
+      }else{
+        alert(res.data.message);
+        setFileData({ fileType:"",caption:"",file:null,caseId:""})
+      }
+    }
+      if(scenario==="subsequent" && role==="normalUser"){
+        let file=userfiles.filter(x=>x.caseId===fileData.caseId);
+        console.log(file);
+        getCourtName(file[0].stationId);
+       let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtName,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
+         'Content-Type': 'multipart/form-data'
+       }})
+       if(res.status!==200){
+        alert(res.data.message);
+      }else{
+        alert(res.data.message);
+        setFileData({ fileType:"",caption:"",file:null,caseId:""})
+      }   
+      }
+      if (scenario==="newcase"){
+    
+      }
+  }catch(err){
+    console.log(err)
   }
-}
-  if(scenario==="subsequent" && role==="normalUser"){
-    let file=userfiles.filter(x=>x.caseId===fileData.caseId);
-    console.log(file);
-    getCourtName(file[0].stationId);
-   let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtName,filetype:fileData.fileType,file:fileData.file,caseId:fileData.caseId},{headers: {
-     'Content-Type': 'multipart/form-data'
-   }})
-   if(res.status!==200){
-    alert(res.data.message);
-  }else{
-    alert(res.data.message);
-    setFileData({ fileType:"",caption:"",file:null,caseId:""})
-  }   
-  }
-  if (scenario==="newcase"){
-
-  }
+   // onAddFile(fileData);
+ 
   onClose();
   };
 
