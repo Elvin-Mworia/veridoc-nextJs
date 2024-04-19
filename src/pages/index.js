@@ -16,16 +16,21 @@ export default function Home() {
   const dispatch=useDispatch();
   const {walletAddress,name,role}=useSelector((state)=>(state.userInfo))
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsWindowAvailable(true);
-       // Import the connect function only after window is available
-       import('@othent/kms').then((module) => {
-       othent= module
-      });
-    }else{
-      setIsWindowAvailable(false);
-
+    try{
+      if (typeof window !== 'undefined') {
+        setIsWindowAvailable(true);
+         // Import the connect function only after window is available
+         import('@othent/kms').then((module) => {
+         othent= module
+        });
+      }else{
+        setIsWindowAvailable(false);
+  
+      }
+    }catch(err){
+console.log(err);
     }
+  
   }, [isWindowAvailable]);
 //connects the othentkms during signup or login
   async function handleConnect(auth) {
@@ -54,10 +59,10 @@ export default function Home() {
         }
         
       }).catch((err)=>{
-        console.log(err.response.data.message);
-        if(err.response.status===400){
-        alert(err.response.data.message.concat(",try signing up!"))
-        }
+        console.log(err);
+        // if(err.request.status===400){
+        // alert(err.data.message.concat("try signing up!"))
+        // }
         
       })
     
