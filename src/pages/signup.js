@@ -1,21 +1,99 @@
 "use client"
 import Image from "next/image";
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import axios from 'axios'
-import { useSelector} from "react-redux";
+import { useSelector,useDispatch} from "react-redux";
 import { useRouter } from 'next/navigation'
+import {updateuserinfo} from "../../store/userSlice/userInfo";
+import {updateLoginState} from "../../store/userSlice/loginStatus"
+import { updateStaffStation } from "../../store/userSlice/staffStation";
+
 
 export default function signup() {
+  // const initialAccountType = {
+  //   individual: false,
+  //   company: false,
+  //   lawFirm: false,
+  //   staff: false,
+  // };
 const router = useRouter();
-const {walletAddress,role}=useSelector((state)=>(state.userInfo))
+const {walletAddress,name,role}=useSelector((state)=>(state.userInfo))
 const[phone,setPhone]=useState(null)
-const[name,setName]=useState(null)
+const[fullname,setName]=useState(null)
 const[email,setAddress]=useState(null)
+//const [accountType, setAccountType] = useState(initialAccountType);
+const [isWindowAvailable, setIsWindowAvailable] = useState(false);
+  let othent;
+  const dispatch=useDispatch();
+
+  useEffect(() => {
+    try{
+      if (typeof window !== 'undefined') {
+        setIsWindowAvailable(true);
+         // Import the connect function only after window is available
+         import('@othent/kms').then((module) => {
+         othent= module
+        });
+      }else{
+        setIsWindowAvailable(false);
+  
+      }
+    }catch(err){
+console.log(err);
+    }
+  
+  }, [isWindowAvailable]);
+//connects the othentkms during signup or login
+  async function handleConnect(auth) {
+    try{
+    if(auth==="login"){
+    othent.connect().then((res)=>{
+      let walletAddress=res.walletAddress;
+      let name=res.name;
+      axios.post('http://localhost:5001/users/login',{walletAddress:walletAddress}).then((res)=>{
+      if(res.status===200){
+        dispatch(updateLoginState({loginStatus:true}))
+       dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:res.data.role}))
+          alert(res.data.message);
+          console.log(res.data)
+          if(res.data.role=="staff"){
+           dispatch(updateStaffStation({station:res.data.station}))
+            router.push( "/staff/dashboard");
+          }
+          if(res.data.role=="admin"){
+            router.push( "/admin/dashboard");
+          }
+         if(res.data.role=="normalUser"){
+            router.push( "/user/dashboard");
+          }
+     
+        }
+        
+      }).catch((err)=>{
+        console.log(err);
+        // if(err.request.status===400){
+        // alert(err.data.message.concat("try signing up!"))
+        // }
+        
+      })
+    
+    });
+    } else if(auth==="signup"){
+      othent.connect().then((res)=>{
+        dispatch(updateuserinfo({walletAddress:res.walletAddress,name:res.name,role:"normalUser"}))
+        router.push( "/signup");
+    })
+ 
+    }
+  }catch(err){
+    console.log(err)
+  }
+  };
 
 function handleSubmit(e){
   e.preventDefault();
   axios.post('http://localhost:5001/users/l2',{
-    walletAddress,email,phone,role,name
+    walletAddress,email,phone,role,fullname
   }).then((res)=>{
    console.log(res);
    if(res.response.status===200){
@@ -28,12 +106,26 @@ function handleSubmit(e){
   router.push("/")
   }).catch((err)=>{
     if(err.response.status===400){
-      alert(err.response.data.message.concat(",proceed to login"));
+      alert(err.response.data.message.concat("proceed to login"));
       router.push("/");
     }
   })
 
 }
+
+// const handleAccountTypeChange = (e) => {
+//   const selectedType=e.target.value;
+//   console.log(selectedType);
+//   setAccountType((prevState) => ({
+//     ...prevState,
+//    // Set the selected type to true and reset others to false
+//    individual: selectedType === 'individual' ? true : false,
+//    company: selectedType === 'company' ? true : false,
+//    lawFirm: selectedType === 'lawFirm' ? true : false,
+//    staff: selectedType === 'staff' ? true : false,
+//  }));
+//  console.log(accountType);
+// }
   return (
     <div className="h-screen flex flex-col">
       <div className="flex h-16 items-center w-full p-6">
@@ -50,13 +142,12 @@ function handleSubmit(e){
             Decentralizing Trust: Fairness for All
           </p>
         </div>
-        <a
-          href="/login"
+        <button
           className="bg-main-blue rounded px-5 py-1 text-white ml-auto"
-          onClick={()=>{console.log("login")}}
+          onClick={()=>{handleConnect('login')}}
         >
           Login
-        </a>
+        </button>
       </div>
       <div className="grow flex items-center justify-center">
         <div className="">
@@ -75,7 +166,7 @@ function handleSubmit(e){
                       type="radio"
                       name="accountType"
                       value="individual"
-                      className="mr-2"
+                      className="mr-2"                
                     />
                     Individual
                   </label>
@@ -94,8 +185,20 @@ function handleSubmit(e){
                       name="accountType"
                       value="lawFirm"
                       className="mr-2"
+                     
                     />
                     Law Firm
+                  </label>
+                  <label className="mr-6 block">
+                    <input
+                      type="radio"
+                      name="accountType"
+                      value="staff"
+                      className="mr-2"
+                    
+        
+                    />
+                    Judiciary Staff
                   </label>
                 </div>
               </fieldset>
@@ -107,7 +210,7 @@ function handleSubmit(e){
                   type="text"
                   id="name"
                   name="name"
-                  value={name}
+                  value={fullname}
                   className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   onChange={(e)=>{setName(e.target.value)}}
                   required
