@@ -6,6 +6,7 @@ import axios from "axios"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
+import SubsequentFileModal from "@/components/UserSubsequentFIleModal";
 
 
 export default function CaseForUser(){
@@ -13,7 +14,9 @@ export default function CaseForUser(){
     const {caseId}=useSelector((state)=>state.caseId)
     const [file,setFile]=useState(null)    
     const [subfile,setSubFile]=useState([])   
-    
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
     async  function fetchCase(){
       let res=await axios.post("http://127.0.0.1:5001/cases/getCase",{caseId})
     // console.log(res.data.message[0]);
@@ -21,7 +24,10 @@ export default function CaseForUser(){
       let subRes=await axios.post("http://127.0.0.1:5001/cases/getSubsequentFile",{caseId})
       setSubFile(subRes.data.message);
     }
-
+    const handleAddFile = (fileData) => {
+      const updatedFiles = [...formData.files, fileData]; // Assuming `files` field in your formData
+      setFormData({ ...formData, files: updatedFiles });
+    };
   
   function unixToDate(timestamp){
     const dateObject = dayjs.unix((Number(timestamp)/1000));
@@ -94,7 +100,7 @@ export default function CaseForUser(){
               <th className="px-6 py-2">Upload/Modification Date</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
           {
              subfile.length>0 ? subfile.map((file)=>{
               return(
@@ -115,10 +121,24 @@ export default function CaseForUser(){
           }     
           </tbody>
         </table>
+        <button
+        
+        onClick={openModal}
+          className="bg-main-blue absolute right-5 bottom-5 text-white mt-10 px-3 py-2 rounded-lg"
+        >
+          Upload File
+        </button>
       </div>
 
      
     </div>
+    <SubsequentFileModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        scenario={"subsequent"}
+        onAddFile={handleAddFile}
+        userfile={file}
+      />
       </div> 
     )
       }
