@@ -15,20 +15,27 @@ export default function Dashboard() {
   const dispatch=useDispatch();
   const myQuery=new Query();
   const courtNameMap=new Map()
+  function sorting(data) {
+    // 1. Sort the array in ascending order by timestamp
+    const sortedData = data.sort((a, b) => Number(b.date) -Number(a.date)) ;
+    // 2. Return the first element (youngest based on ascending sort)
+    return sortedData;
+  }
  async function getUserFiles(walletAddress){
   let res=await myQuery.search("irys:transactions")
 	.tags([{ name: "Content-Type", values: ["application/pdf","application/epub+zip"] },
   { name: "walletAddress", values: [walletAddress] }]);
   //console.log(res);
   if(res.length>0){
-    setFiles(...res)
+
+    setFiles(...sorting(res));
   }
  }
  //fetching user files then filtering the once with status of pending
  function getUserPendingFiles(walletAddress){
   axios.post("http://localhost:5001/cases/casesForUser",{walletAddress}).then(res=>{
     if(res.status===200){  
-      setFiles(res.data.message);
+      setFiles(sorting(res.data.message));
     let pendingFiles=res.data.message.filter((file)=>file.status==="pending");
 
     console.log(pendingFiles.length)
@@ -51,7 +58,7 @@ useEffect(()=>{
 
         <Link
           href={"/cases/create"}
-          className="bg-main-blue text-white px-3 py-2 rounded-lg"
+          className="bg-main-blue text-white px-3 py-2 mr-2 rounded-lg"
         >
           File New Case
         </Link>

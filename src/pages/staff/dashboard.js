@@ -24,10 +24,15 @@ export default function Dashboard() {
     const updatedFiles = [...formData.files, fileData]; // Assuming `files` field in your formData
     setFormData({ ...formData, files: updatedFiles });
   };
-
+  function sorting(data) {
+    // 1. Sort the array in ascending order by timestamp
+    const sortedData = data.sort((a, b) => Number(b.date) -Number(a.date)) ;
+    // 2. Return the first element (youngest based on ascending sort)
+    return sortedData;
+  }
 async function fetchPendingApproval(){
     let res=await axios.post("http://127.0.0.1:5001/cases/getpendingfiles",{walletAddress,station})
-    setpendingApproval(res.data.message);
+    setpendingApproval(sorting(res.data.message));
     setPendingCaseCount(res.data.message.length);
   }
 //converts unix timestamp to local time
