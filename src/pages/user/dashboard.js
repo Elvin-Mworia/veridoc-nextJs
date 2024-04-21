@@ -58,8 +58,8 @@ useEffect(()=>{
       </div>
       <div className="flex mt-8">
         {/* Table Section */}
-        <div className="w-3/4">
-          <table class="min-w-full text-left text-sm font-light">
+        <div className="w-3/4 h-96 overflow-y-auto">
+          <table class="min-w-full  text-left text-sm font-light overflow-y-auto">
             <thead class="border font-medium bg-main-blue text-white border-white">
               <tr>
                 <th scope="col" class="px-6 py-4">
