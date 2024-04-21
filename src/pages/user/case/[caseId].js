@@ -39,7 +39,7 @@ export default function CaseForUser(){
     },[])
 
     return(
-        <div className=" flex  p-3 mt-2">
+        <div className=" flex  p-3 mt-1">
      <div className="p-10">
       <h1 className="font-bold text-secondary-blue text-2xl mb-4">
         Case

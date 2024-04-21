@@ -19,22 +19,20 @@ export default function SubsequentFileModal({ isOpen, onClose,onAddFile,scenario
   });
   const [courtName,setCourtName]=useState("");
   const [processing,setProcessing]=useState(false)
-  if(role==="staff"){
-    const {station}=useSelector((state) => state.staffStation);
-    courtstation=station;
-  }
+
  
   //get the name of a court provided is stationId
- function getCourtName(stationId){
-  axios.post("http://localhost:5001/station/getStation",{stationId}).then(res=>{
+ async function getCourtName(stationId){
+  try{
+  let res =await axios.post("http://localhost:5001/station/getStation",{stationId})
     console.log(res)
     if(res.status===200){  
       setCourtName(res.data.message);
       console.log(courtName)
       }
-  }).catch((err)=>{
+  }catch(err){
     console.log(err);
-  })
+  }
 
  }
 
@@ -62,7 +60,7 @@ export default function SubsequentFileModal({ isOpen, onClose,onAddFile,scenario
       if(scenario==="subsequent" && role==="normalUser"){
       //  let file=userfile.filter(x=>x.caseId===fileData.caseId);
         console.log(userfile.stationId);
-        getCourtName(userfile.stationId);
+   await getCourtName(userfile.stationId);
         console.log(courtName);
        let res= await axios.post("http://127.0.0.1:5001/cases/uploadsubsequentfile",{walletAddress,station:courtName,filetype:fileData.fileType,file:fileData.file,caseId:caseId},{headers: {
          'Content-Type': 'multipart/form-data'

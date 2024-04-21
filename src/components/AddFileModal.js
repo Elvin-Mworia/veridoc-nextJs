@@ -7,6 +7,7 @@ import {updateFile} from "../../store/fileSlice/file"
 function AddFileModal({ isOpen, onClose,onAddFile,scenario,userfiles}) {
   let courtstation;
   const {role,walletAddress}=useSelector((state) => state.userInfo);
+  const {station}=useSelector((state) => state.staffStation);
   const {file}=useSelector((state)=>(state.file))
   const dispatch=useDispatch()
   const [fileData, setFileData] = useState({
@@ -17,7 +18,7 @@ function AddFileModal({ isOpen, onClose,onAddFile,scenario,userfiles}) {
   });
   const [courtName,setCourtName]=useState("");
   if(role==="staff"){
-    const {station}=useSelector((state) => state.staffStation);
+    // const {station}=useSelector((state) => state.staffStation);
     courtstation=station;
   }
  

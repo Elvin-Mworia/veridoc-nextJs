@@ -49,12 +49,12 @@ useEffect(()=>{
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold text-main-blue">Filed Cases</h1>
 
-        <a
-          href="/cases/create"
+        <Link
+          href={"/cases/create"}
           className="bg-main-blue text-white px-3 py-2 rounded-lg"
         >
           File New Case
-        </a>
+        </Link>
       </div>
       <div className="flex mt-8">
         {/* Table Section */}

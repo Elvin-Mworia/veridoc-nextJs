@@ -6,6 +6,7 @@ import {updateLoginState} from "../../store/userSlice/loginStatus"
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import { updatePayment } from "../../store/paymentSlice/payment";
 import Template from "./template";
+import Link from "next/link"
 export default function Layout({ children }) {
  const router = useRouter()
  const dispatch=useDispatch()
@@ -54,10 +55,10 @@ export default function Layout({ children }) {
           </p>
         </div>
         <p className="ml-auto mr-3 underline text-main-blue">{name}</p>
-        <a href="/" className="bg-main-blue rounded px-5 py-1 text-white"
+        <Link href={"/"} className="bg-main-blue rounded px-5 py-1 text-white"
              onClick={handleDisConnect}>
           Log Out
-        </a>
+        </Link>
       </div>
 
       <Template className="px-6" >{children}</Template>

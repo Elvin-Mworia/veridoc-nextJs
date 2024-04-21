@@ -2,7 +2,7 @@
 import {useState} from "react";
 import axios from "axios";
 export default function AddFolderModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
+ 
   const [name,setFolder]=useState("");
 async function handleSubmit(e){
   e.preventDefault()
@@ -25,7 +25,7 @@ if(res.status===200){
     onClose();
     window.location.reload();
 }
-
+if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-5 rounded-lg">

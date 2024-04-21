@@ -6,7 +6,7 @@ import { updatePayment } from "../../store/paymentSlice/payment";
 import Loading from "@/components/loadingOverlay"
 export default function MpesaModal({ isOpen, onClose}) {
  const dispatch=useDispatch()
-  if (!isOpen) return null;
+ 
 const [phone,setPhone]=useState("");
 const [processing,setProcessing]=useState(false)
 function sleep(milliseconds) {  
@@ -30,7 +30,7 @@ if(res.status===200){
   }
  
 }
-
+if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-5 rounded-lg">

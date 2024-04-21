@@ -9,7 +9,7 @@ import {updateLoginState} from "../../store/userSlice/loginStatus"
 import { updateStaffStation } from "../../store/userSlice/staffStation";
 
 
-export default function signup() {
+export default function Signup() {
   // const initialAccountType = {
   //   individual: false,
   //   company: false,

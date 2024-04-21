@@ -2,7 +2,7 @@
 import axios from "axios";
 import {useState} from "react";
 export default function AddAdminModal({ isOpen, onClose}) {
-  if (!isOpen) return null;
+ 
 const [walletAddress,setWalletAddress]=useState("");
 async function handleSubmit(){
 
@@ -21,7 +21,7 @@ async function handleSubmit(){
   onClose();
   window.location.reload();
 }
-
+if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-5 rounded-lg">
