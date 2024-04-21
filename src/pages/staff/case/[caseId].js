@@ -5,12 +5,18 @@ import { useEffect,useState} from "react";
 import axios from "axios"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation";
-
+import AddInfo from "@/components/AdditionalInfoModal";
 
 export default function CaseStaff(){
     const router=useRouter();
     const {caseId}=useSelector((state)=>state.caseId)
-    const [file,setFile]=useState(null)    
+    const [file,setFile]=useState(null)   
+    const [isFeedbackModalOpen, setFeedbackModalOpen] = useState(false);
+    const [filestatus,setStatus]=useState("")
+   //for showing the add infon modal
+  function handleStatus(){
+    setFeedbackModalOpen(true);
+  } 
     
     async  function fetchCase(){
       let res=await axios.post("http://127.0.0.1:5001/cases/getCase",{caseId})
@@ -108,19 +114,27 @@ export default function CaseStaff(){
 
       <div className="flex justify-between mt-6">
         <button
-          onClick={()=>{approval("rejected")}}
+          onClick={()=>{ setStatus("rejected")
+            handleStatus(true)
+            }}
           className="bg-main-blue text-white font-semibold px-4 py-2 rounded hover:bg-main-blue-dark focus:outline-none focus:ring-2 focus:ring-main-blue focus:ring-opacity-50 transition ease-in-out duration-150"
         >
           Reject
         </button>
         <button
-          onClick={()=>{approval("approved")}}
+          onClick={()=>{
+            setStatus("approved")
+            handleStatus(true)
+           } }
           className="bg-main-blue text-white font-semibold px-4 py-2 rounded hover:bg-main-blue-dark focus:outline-none focus:ring-2 focus:ring-main-blue focus:ring-opacity-50 transition ease-in-out duration-150"
         >
           Accept
         </button>
       </div>
     </div>
+    <AddInfo   isOpen={isFeedbackModalOpen}
+     onClose={() => setFeedbackModalOpen(false)}
+     status={filestatus}/>
       </div> 
     )
 }
