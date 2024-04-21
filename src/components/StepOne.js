@@ -2,15 +2,32 @@ import {  useDispatch,useSelector } from "react-redux";
 import { updateCaseStation } from "../../store/caseSlice/caseStation";
 import { updateCaseRank } from "../../store/caseSlice/caseRank";
 import { updateCaseDivision} from "../../store/caseSlice/caseDivision";
+import {useState,useEffect} from "react"
+import axios from 'axios'
+
 export default function StepOne({ nextStep, formData, handleChange }) {
  const CourtRank=["Supreme Court","Court of Appeal","High Court","Employment and Labour Relation Court","Environment and Land Court","Magistrate Court","Kadhi Court","Tribunal","Small Court Claims"]
  const CourtDivision=["Court Annexed Mediation","Anticorruption","Civil","Commercial and Tax","Family","Criminal","Constitution and Human Rights","Judicial Review"]
 //const CourtRank={0:"Supreme Court",1:"Court of Appeal",2:"High Court",3:"Employment and Labour Relation Court",4:"Environment and Land Court",5:"Magistrate Court",6:"Kadhi Court",7:"Tribunal",8:"Small Court Claims"}
 // console.log(Object.values(CourtRank));
+const[station,setStations]=useState([]);
 const dispatch=useDispatch();
 const {courtRank}=useSelector((state)=>(state.rank))
 const {courtStation}=useSelector((state)=>(state.station))
 const {courtDivision}=useSelector((state)=>(state.division))
+async function getAllStations(){
+  try{
+let res=await axios.get("http://127.0.0.1:5001/station/getAllStationFolders")
+if(res.status===200){
+  setStations(res.data.folders)
+}
+  }catch(err){
+    console.log(err)
+  }
+}
+useEffect(()=>{
+  getAllStations()
+},[])
   return (
     <div className="p-10">
       <h1 className="font-bold text-secondary-blue text-2xl">File New Case</h1>
@@ -61,7 +78,16 @@ const {courtDivision}=useSelector((state)=>(state.division))
             onChange={(e)=>dispatch(updateCaseStation({courtStation:e.target.value}))}
           >
             <option value="">Pick Court Station</option>
-            
+            {
+              station.map((stationName,index)=>(
+                <>
+                  <option value={stationName.name} key={index}>{stationName.name}</option>
+
+                </>
+              )
+
+              )
+            }
              <option value="Milimani">Milimani</option>
                  
              
