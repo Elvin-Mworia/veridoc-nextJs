@@ -3,17 +3,28 @@ import axios from "axios";
 import {useState} from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/loadingOverlay"
 export default function AddInfo({ isOpen, onClose,status}) {
   
 const {caseId}=useSelector((state)=>state.caseId)
 const [input,setInput]=useState("");
+const [processing,setProcessing]=useState(false)
 const router=useRouter();
+function sleep(milliseconds) {  
+  return new Promise(resolve => setTimeout(resolve, milliseconds));  
+}  
 async function approval(status){
     let res=await axios.post("http://127.0.0.1:5001/cases/approval",{status,caseId,feedback:input})
-    router.push("/staff/dashboard");   
+     
     if(res.status===200){
+      setProcessing(true);
+      await sleep(3000)
+      router.push("/staff/dashboard");
       setInput("");
       onClose()
+      alert("Feedback submitted successfuly.")
+      setProcessing(false);
+
     } 
 
   }
@@ -78,6 +89,9 @@ if (!isOpen) return null;
           </div>
         </form>
       </div>
+      {
+        processing===true ? <Loading placeholder={"Submitting..."}/>:<></>
+      }
     </div>
   );
 }
