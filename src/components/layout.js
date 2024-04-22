@@ -5,6 +5,9 @@ import { useState, useEffect } from 'react';
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import { updatePayment } from "../../store/paymentSlice/payment";
+import { updateCaseStation } from "../../store/caseSlice/caseStation";
+import { updateCaseRank } from "../../store/caseSlice/caseRank";
+import { updateCaseDivision} from "../../store/caseSlice/caseDivision";
 import Template from "./template";
 import Link from "next/link"
 export default function Layout({ children }) {
@@ -30,11 +33,17 @@ export default function Layout({ children }) {
   const {name}=useSelector((state)=>(state.userInfo))
   //disconnects the othentkms from the widow
   async function handleDisConnect() {
+    try{
     dispatch(updateLoginState({loginStatus:false}));
     dispatch(updateuserinfo({walletAddress:"",name:"",role:""}));
     dispatch(updatePayment({paid:false}))
-    const res = await  othent.disconnect();
-    console.log("Disconnect,\n", res);
+    dispatch(updateCaseStation({courtStation:""}))
+    dispatch(updateCaseRank({courtRank:""}))
+    dispatch(updateCaseDivision({courtDivision:""}))
+
+    await  othent.disconnect();
+    //console.log("Disconnect,\n", res);
+  }catch(err){console.log(err)}
   };
 
 
