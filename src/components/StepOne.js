@@ -88,7 +88,7 @@ useEffect(()=>{
 
               )
             }
-             <option value="Milimani">Milimani</option>
+            
                  
              
           </select>
