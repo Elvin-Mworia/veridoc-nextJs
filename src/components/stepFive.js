@@ -5,6 +5,9 @@ import { useState } from "react";
 import MpesaModal from "./mpesaModal";
 import Loading from "@/components/loadingOverlay"
 import { updatePayment } from "../../store/paymentSlice/payment";
+import { updateCaseStation } from "../../store/caseSlice/caseStation";
+import { updateCaseRank } from "../../store/caseSlice/caseRank";
+import { updateCaseDivision} from "../../store/caseSlice/caseDivision";
 export default function StepFive({ prevStep, formData}) {
   const {courtRank}=useSelector((state)=>(state.rank))
   const {courtStation}=useSelector((state)=>(state.station))
@@ -36,6 +39,9 @@ export default function StepFive({ prevStep, formData}) {
       setProcessing(false)
       alert("Case filed succefully")
       dispatch(updatePayment({paid:false}))
+      dispatch(updateCaseStation({courtStation:""}))
+      dispatch(updateCaseRank({courtRank:""}))
+      dispatch(updateCaseDivision({courtDivision:""}))
       router.push("/user/dashboard")
     }
   }
