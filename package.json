@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "next lint"
   },
   "proxy": "http://127.0.0.1:5001",
@@ -23,6 +23,7 @@
     "react-dom": "^18",
     "react-redux": "^9.1.0",
     "redux-persist": "^6.0.0",
+    "sharp": "^0.33.5",
     "warp-contracts": "^1.4.34"
   },
   "devDependencies": {
