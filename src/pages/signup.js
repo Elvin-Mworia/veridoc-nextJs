@@ -71,10 +71,7 @@ console.log(err);
         
       }).catch((err)=>{
         console.log(err);
-        // if(err.request.status===400){
-        // alert(err.data.message.concat("try signing up!"))
-        // }
-        
+      
       })
     
     });
@@ -96,17 +93,17 @@ function handleSubmit(e){
     walletAddress,email,phone,role,fullname
   }).then((res)=>{
    console.log(res);
-   if(res.response.status===200){
+   if(res.status===200){
     alert("registered successfully,proceed to login");
     setName(null);
     setPhone(null);
     setAddress(null);
    }
-   console.log(res.response.data.message)
+   console.log(res.data.message)
   router.push("/")
   }).catch((err)=>{
-    if(err.response.status===400){
-      alert(err.response.data.message.concat("proceed to login"));
+    if(err.request.status===400){
+      alert(err.data.message.concat("proceed to login"));
       router.push("/");
     }
   })

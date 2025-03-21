@@ -82,7 +82,8 @@ export default function CaseForUser(){
           <tbody>
                 <tr className="border-b">
                 {/* <td className="px-6 py-2">{file?.txId}</td> */}
-                <td class="whitespace-nowrap px-6 py-2"><Link className="text-main-blue text-center underline p-1  hover:text-red-900" href={`https://arweave.net/${file?.txId}`} target="_blank">{file?.txId}</Link></td>
+                <td class="whitespace-nowrap px-6 py-2"><Link className="text-main-blue text-center underline p-1  hover:text-red-900" 
+                href={`https://arweave.net/${file?.txId}`} target="_blank">{file?.txId}</Link></td>
 
                   <td className="px-6 py-2">{unixToDate(file?.date)}</td>
                 </tr>
