@@ -12,7 +12,7 @@ import axios from "axios"
 export default function Home() {
   const router = useRouter()
   const [isWindowAvailable, setIsWindowAvailable] = useState(false);
-  const othent=useRef(null) ;
+  let othent;
   const dispatch=useDispatch();
   const {walletAddress,name,role}=useSelector((state)=>(state.userInfo))
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function Home() {
         setIsWindowAvailable(true);
          // Import the connect function only after window is available
          import('@othent/kms').then((module) => {
-         othent.current= module
+         othent= module
         });
       }else{
         setIsWindowAvailable(false);
