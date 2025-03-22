@@ -24,7 +24,7 @@ function AddFileModal({ isOpen, onClose,onAddFile,scenario,userfiles}) {
  
   //get the name of a court provided is stationId
  function getCourtName(stationId){
-  axios.post("http://localhost:5001/station/getStation",{stationId}).then(res=>{
+  axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/station/getStation`,{stationId}).then(res=>{
     if(res.status===200){  
       setCourtName(res.data.message);
       }

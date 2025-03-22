@@ -1,7 +1,7 @@
 'use client'
 import Layout from "@/components/layout";
 import { useSelector } from "react-redux";
-import { useEffect,useState} from "react";
+import { useEffect,useState,useRef} from "react";
 import axios from "axios"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation";
@@ -21,13 +21,13 @@ export default function CaseStaff(){
   } 
     
     async  function fetchCase(){
-      let res=await axios.post("http://127.0.0.1:5001/cases/getCase",{caseId})
+      let res=await axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/cases/getCase`,{caseId})
     // console.log(res.data.message[0]);
       setFile(res.data.message);
     }
 
   async function approval(status){
-    let res=await axios.post("http://127.0.0.1:5001/cases/approval",{status,caseId})
+    let res=await axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/cases/approval`,{status,caseId})
     router.push("/staff/dashboard");    
 
   }
@@ -39,7 +39,7 @@ export default function CaseStaff(){
  
     useEffect(()=>{
       fetchCase();
-    },[])
+    })
 
 
     return(

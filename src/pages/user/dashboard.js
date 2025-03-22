@@ -32,24 +32,25 @@ export default function Dashboard() {
   }
  }
  //fetching user files then filtering the once with status of pending
- function getUserPendingFiles(walletAddress){
-  axios.post("http://localhost:5001/cases/casesForUser",{walletAddress}).then(res=>{
-    if(res.status===200){  
-      setFiles(sorting(res.data.message));
-    let pendingFiles=res.data.message.filter((file)=>file.status==="pending");
 
-    console.log(pendingFiles.length)
-    setPending(pendingFiles);
-      }
-  }).catch((err)=>{
-    console.log(err);
-  })
- }
 useEffect(()=>{
+  function getUserPendingFiles(walletAddress){
+    axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/cases/casesForUser`,{walletAddress}).then(res=>{
+      if(res.status===200){  
+        setFiles(sorting(res.data.message));
+      let pendingFiles=res.data.message.filter((file)=>file.status==="pending");
+  
+      console.log(pendingFiles.length)
+      setPending(pendingFiles);
+        }
+    }).catch((err)=>{
+      console.log(err);
+    })
+   }
  // getUserFiles(walletAddress);
  // getUserPendingFiles("d6KpB0ztMhjMnC9fuE3lp");
   getUserPendingFiles(walletAddress);
-},[])
+},[pending])
 
   return (
     <div className="py-6 ">
