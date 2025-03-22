@@ -23,7 +23,7 @@ const[fullname,setName]=useState(null)
 const[email,setAddress]=useState(null)
 //const [accountType, setAccountType] = useState(initialAccountType);
 const [isWindowAvailable, setIsWindowAvailable] = useState(false);
-const othent=useRef(null);
+let othent;
   const dispatch=useDispatch();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const othent=useRef(null);
         setIsWindowAvailable(true);
          // Import the connect function only after window is available
          import('@othent/kms').then((module) => {
-         othent.current= module
+         othent= module
         });
       }else{
         setIsWindowAvailable(false);
