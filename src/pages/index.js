@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { useSelector,useDispatch} from "react-redux";
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import {updateLoginState} from "../../store/userSlice/loginStatus"
@@ -12,7 +12,7 @@ import axios from "axios"
 export default function Home() {
   const router = useRouter()
   const [isWindowAvailable, setIsWindowAvailable] = useState(false);
-  let othent;
+  const othent=useRef(null) ;
   const dispatch=useDispatch();
   const {walletAddress,name,role}=useSelector((state)=>(state.userInfo))
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function Home() {
         setIsWindowAvailable(true);
          // Import the connect function only after window is available
          import('@othent/kms').then((module) => {
-         othent= module
+         othent.current= module
         });
       }else{
         setIsWindowAvailable(false);
@@ -39,7 +39,7 @@ console.log(err);
     othent.connect().then((res)=>{
       let walletAddress=res.walletAddress;
       let name=res.name;
-      axios.post('http://localhost:5001/users/login',{walletAddress:walletAddress}).then((res)=>{
+      axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/login`,{walletAddress:walletAddress}).then((res)=>{
       if(res.status===200){
         dispatch(updateLoginState({loginStatus:true}))
        dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:res.data.role}))

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from 'next/navigation'
 import { useSelector,useDispatch} from "react-redux";
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import { updatePayment } from "../../store/paymentSlice/payment";
@@ -14,14 +14,14 @@ export default function Layout({ children }) {
  const router = useRouter()
  const dispatch=useDispatch()
  const [isWindowAvailable, setIsWindowAvailable] = useState(false);
-  let othent;
+const othent=useRef(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsWindowAvailable(true);
        // Import the connect function only after window is available
        import('@othent/kms').then((module) => {
-       othent= module
+       othent.current= module
       });
     }else{
       setIsWindowAvailable(false);

@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import {useState,useEffect} from 'react';
+import {useState,useEffect,useRef} from 'react';
 import axios from 'axios'
 import { useSelector,useDispatch} from "react-redux";
 import { useRouter } from 'next/navigation'
@@ -23,7 +23,7 @@ const[fullname,setName]=useState(null)
 const[email,setAddress]=useState(null)
 //const [accountType, setAccountType] = useState(initialAccountType);
 const [isWindowAvailable, setIsWindowAvailable] = useState(false);
-  let othent;
+const othent=useRef(null);
   const dispatch=useDispatch();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const [isWindowAvailable, setIsWindowAvailable] = useState(false);
         setIsWindowAvailable(true);
          // Import the connect function only after window is available
          import('@othent/kms').then((module) => {
-         othent= module
+         othent.current= module
         });
       }else{
         setIsWindowAvailable(false);
@@ -50,7 +50,7 @@ console.log(err);
     othent.connect().then((res)=>{
       let walletAddress=res.walletAddress;
       let name=res.name;
-      axios.post('http://localhost:5001/users/login',{walletAddress:walletAddress}).then((res)=>{
+      axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/login`,{walletAddress:walletAddress}).then((res)=>{
       if(res.status===200){
         dispatch(updateLoginState({loginStatus:true}))
        dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:res.data.role}))
@@ -89,7 +89,7 @@ console.log(err);
 
 function handleSubmit(e){
   e.preventDefault();
-  axios.post('http://localhost:5001/users/l2',{
+  axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/l2`,{
     walletAddress,email,phone,role,fullname
   }).then((res)=>{
    console.log(res);
