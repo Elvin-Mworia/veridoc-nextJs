@@ -4,7 +4,7 @@ import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import "@/styles/globals.css";
 import Layout from "@/components/layout";
-
+import { ProviderChakra } from "@/components/ui/Chakra/provider";
 export default function App({ Component, pageProps }) {
   const persistor = persistStore(Store);
 
@@ -14,7 +14,9 @@ export default function App({ Component, pageProps }) {
     <>
       <Provider store={Store}> 
       <PersistGate persistor={persistor}>
+        <ProviderChakra>
       {getLayout(<Component {...pageProps} />)}
+      </ProviderChakra>
        </PersistGate> 
        </Provider>
     </>
