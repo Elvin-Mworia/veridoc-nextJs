@@ -68,12 +68,8 @@ console.log(err);
     
     });
     } else if(auth==="signup"){
-      othent.connect().then((res)=>{
-        dispatch(updateuserinfo({walletAddress:res.walletAddress,name:res.name,role:"normalUser"}))
-        router.push( "/signup");
-    })
- 
-    }
+    router.push( "/signup");
+  }
   }catch(err){
     console.log(err)
   }
