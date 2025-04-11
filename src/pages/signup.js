@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import { updateStaffStation } from "../../store/userSlice/staffStation";
-
+import { Box ,Tabs,VStack,useTabs} from "@chakra-ui/react"
 
 export default function Signup() {
   // const initialAccountType = {
@@ -21,6 +21,12 @@ const {walletAddress,name,role}=useSelector((state)=>(state.userInfo))
 const[phone,setPhone]=useState(null)
 const[fullname,setName]=useState(null)
 const[email,setAddress]=useState(null)
+const[password,setPassword]=useState(null)
+const[confirmPassword,setConfirmPassword]=useState(null)
+const[accountType,setAccountType]=useState(null)
+const tabs = useTabs({
+  defaultValue: "Individual",
+})
 //const [accountType, setAccountType] = useState(initialAccountType);
 const [isWindowAvailable, setIsWindowAvailable] = useState(false);
 let othent;
@@ -47,12 +53,11 @@ console.log(err);
   async function handleConnect(auth) {
     try{
     if(auth==="login"){
-    othent.connect().then((res)=>{
-      let walletAddress=res.walletAddress;
-      let name=res.name;
-      axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/login`,{walletAddress:walletAddress}).then((res)=>{
+      
+      axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/v2/login`,{email:email,password:password}).then((res)=>{
       if(res.status===200){
         dispatch(updateLoginState({loginStatus:true}))
+        //logic to derive the user walletaddress after successful login
        dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:res.data.role}))
           alert(res.data.message);
           console.log(res.data)
@@ -74,12 +79,9 @@ console.log(err);
       
       })
     
-    });
+    
     } else if(auth==="signup"){
-      othent.connect().then((res)=>{
-        dispatch(updateuserinfo({walletAddress:res.walletAddress,name:res.name,role:"normalUser"}))
-        router.push( "/signup");
-    })
+   
  
     }
   }catch(err){
@@ -148,13 +150,26 @@ function handleSubmit(e){
       </div>
       <div className="grow flex items-center justify-center">
         <div className="">
-          <h1 className="text-center font-bold text-2xl text-main-blue">
-            Complete Registration
-          </h1>
-
-          <div className="mt-5 rounded p-3 bg-transparent-blue">
-            {/* Put form here */}
-            <form className="flex flex-col space-y-4">
+         {/*bgPosition="center" bgSize="fit" backgroundOrigin="center" bgRepeat="no-repeat" bgImg="url(/ScaleGavel10.jpeg)"*/}
+          <Box className="bg-[url(/signup/ScaleGavel5.webp)] bg-origin-padding bg-center bg-cover bg-no-repeat bg-clip-border "  width="50vw" height="88vh" padding="4" color="white" borderTopRadius="md">
+   <VStack>    
+     <Tabs.Root defaultValue="Individual" variant="line" width="100%" fitted >
+      <Tabs.List>
+        <Tabs.Trigger value="Individual" className="text-black w-3xs m-2 text-lg font-black  hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
+          Individual
+        </Tabs.Trigger>
+        <Tabs.Trigger value="Law Firm" className="text-black w-3xs m-2 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">  
+        Law Firm
+        </Tabs.Trigger>
+        <Tabs.Trigger value="Judiciary Staff" className="text-black w-3xs m-2 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
+        Judiciary Staff
+        </Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="Individual"></Tabs.Content>
+      <Tabs.Content value="Law firm"></Tabs.Content>
+      <Tabs.Content value="Judiciary Staff"></Tabs.Content>
+    </Tabs.Root>
+          {/* <form className="flex flex-col space-y-4">
               <fieldset className="mb-4">
                 <legend className="font-bold mb-2">Account Type</legend>
                 <div className="flex">
@@ -166,15 +181,6 @@ function handleSubmit(e){
                       className="mr-2"                
                     />
                     Individual
-                  </label>
-                  <label className="mr-6 block">
-                    <input
-                      type="radio"
-                      name="accountType"
-                      value="company"
-                      className="mr-2"
-                    />
-                    Company
                   </label>
                   <label className="mr-6 block">
                     <input
@@ -244,15 +250,17 @@ function handleSubmit(e){
                 />
               </div>
 
-              <button
+          
+            </form> */}
+                <button
                 type="submit"
                 className="bg-main-blue rounded px-5 py-2 text-white mt-4 self-center uppercase text-sm"
                 onClick={handleSubmit}
               >
                 register
               </button>
-            </form>
-          </div>
+              </VStack>  
+          </Box>
         </div>
       </div>
     </div>
