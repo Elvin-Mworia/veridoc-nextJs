@@ -8,7 +8,7 @@ import {updateuserinfo} from "../../store/userSlice/userInfo";
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import { updateStaffStation } from "../../store/userSlice/staffStation";
 import {userRegInfo} from "../../store/userSlice/userRegistration";
-import { Box ,Tabs,VStack,useTabs} from "@chakra-ui/react"
+import { Box ,Tabs,VStack,useTabs,Center} from "@chakra-ui/react"
 import SignupForm from "@/components/SignupForm";
 export default function Signup() {
   // const initialAccountType = {
@@ -116,29 +116,10 @@ function handleSubmit(e){
   })
 
 }
-
-// const handleAccountTypeChange = (e) => {
-//   const selectedType=e.target.value;
-//   console.log(selectedType);
-//   setAccountType((prevState) => ({
-//     ...prevState,
-//    // Set the selected type to true and reset others to false
-//    individual: selectedType === 'individual' ? true : false,
-//    company: selectedType === 'company' ? true : false,
-//    lawFirm: selectedType === 'lawFirm' ? true : false,
-//    staff: selectedType === 'staff' ? true : false,
-//  }));
-//  console.log(accountType);
-// }
   return (
     <div className="h-screen flex flex-col">
       <div className="flex h-16 items-center w-full p-6">
-        <Image
-          className=""
-          width={50}
-          height={50}
-          src="/veridoc2.webp"
-          alt="Veridoc Log"
+        <Image className="" width={50} height={50} src="/veridoc2.webp" alt="Veridoc Log"
         />
         <div className="ml-5">
           <h1 className="text-3xl font-bold text-secondary-blue">Veridoc</h1>
@@ -170,94 +151,11 @@ function handleSubmit(e){
         Judiciary Staff
         </Tabs.Trigger>
       </Tabs.List>
-      <Tabs.Content value="Individual" ><SignupForm tabsValue={tabs.value}/></Tabs.Content>
-      <Tabs.Content value="Law firm" ><SignupForm tabsValue={tabs.value}/></Tabs.Content>
-      <Tabs.Content value="Judiciary Staff"><SignupForm tabsValue={tabs.value}/></Tabs.Content>
+      <Tabs.Content value="Individual" ><Center><SignupForm tabsValue={tabs.value}/></Center></Tabs.Content>
+      <Tabs.Content value="Law firm" ><Center><SignupForm tabsValue={tabs.value}/></Center></Tabs.Content>
+      <Tabs.Content value="Judiciary Staff"><Center><SignupForm tabsValue={tabs.value}/></Center></Tabs.Content>
     </Tabs.Root>
-          {/* <form className="flex flex-col space-y-4">
-              <fieldset className="mb-4">
-                <legend className="font-bold mb-2">Account Type</legend>
-                <div className="flex">
-                  <label className="mr-6 block">
-                    <input
-                      type="radio"
-                      name="accountType"
-                      value="individual"
-                      className="mr-2"                
-                    />
-                    Individual
-                  </label>
-                  <label className="mr-6 block">
-                    <input
-                      type="radio"
-                      name="accountType"
-                      value="lawFirm"
-                      className="mr-2"
-                     
-                    />
-                    Law Firm
-                  </label>
-                  <label className="mr-6 block">
-                    <input
-                      type="radio"
-                      name="accountType"
-                      value="staff"
-                      className="mr-2"
-                    
-        
-                    />
-                    Judiciary Staff
-                  </label>
-                </div>
-              </fieldset>
-              <div className="flex flex-col">
-                <label htmlFor="name" className="font-bold block">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={fullname}
-                  className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  onChange={(e)=>{setName(e.target.value)}}
-                  required
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <label htmlFor="address" className="font-bold block">
-                  Address
-                </label>
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={email}
-                  onChange={(e)=>{setAddress(e.target.value)}}
-                  className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  required
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <label htmlFor="phoneNumber" className="font-bold block">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={phone}
-                  className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                 onChange={(e)=>{setPhone(e.target.value)}}
-                  required
-                />
-              </div>
-
-          
-            </form> */}
-                <button
+        <button
                 type="submit"
                 className="bg-main-blue rounded px-5 py-2 text-white mt-4 self-center uppercase text-sm"
                 onClick={handleSubmit}
