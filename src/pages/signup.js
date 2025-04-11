@@ -148,17 +148,17 @@ function handleSubmit(e){
       <div className="grow flex items-center justify-center">
         <div className="">
          {/*bgPosition="center" bgSize="fit" backgroundOrigin="center" bgRepeat="no-repeat" bgImg="url(/ScaleGavel10.jpeg)"*/}
-          <Box className=""  width="65vw" height="88vh" padding="4" color="white" borderRadius="md">
+          <Box className="bg-[url(/signup/ScaleGavel5.webp)] bg-origin-padding bg-center bg-cover bg-no-repeat bg-clip-border "  width="50vw" height="88vh" padding="4" color="white" borderTopRadius="md">
    <VStack>    
      <Tabs.Root defaultValue="Individual" variant="line" width="100%" fitted >
       <Tabs.List>
-        <Tabs.Trigger value="Individual" className="text-black w-2xs m-5 text-lg font-black  hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
+        <Tabs.Trigger value="Individual" className="text-black w-3xs m-2 text-lg font-black  hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
           Individual
         </Tabs.Trigger>
-        <Tabs.Trigger value="Law Firm" className="text-black w-2xs m-5 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">  
+        <Tabs.Trigger value="Law Firm" className="text-black w-3xs m-2 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">  
         Law Firm
         </Tabs.Trigger>
-        <Tabs.Trigger value="Judiciary Staff" className="text-black w-2xs m-5 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
+        <Tabs.Trigger value="Judiciary Staff" className="text-black w-3xs m-2 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
         Judiciary Staff
         </Tabs.Trigger>
       </Tabs.List>
