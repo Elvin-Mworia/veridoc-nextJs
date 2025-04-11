@@ -7,8 +7,9 @@ import { useRouter } from 'next/navigation'
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import { updateStaffStation } from "../../store/userSlice/staffStation";
+import {userRegInfo} from "../../store/userSlice/userRegistration";
 import { Box ,Tabs,VStack,useTabs} from "@chakra-ui/react"
-
+import SignupForm from "@/components/SignupForm";
 export default function Signup() {
   // const initialAccountType = {
   //   individual: false,
@@ -17,6 +18,7 @@ export default function Signup() {
   //   staff: false,
   // };
 const router = useRouter();
+const dispatch=useDispatch();
 const {walletAddress,name,role}=useSelector((state)=>(state.userInfo))
 const[phone,setPhone]=useState(null)
 const[fullname,setName]=useState(null)
@@ -27,15 +29,18 @@ const[accountType,setAccountType]=useState(null)
 const tabs = useTabs({
   defaultValue: "Individual",
 })
+const [userCategory,setUserCategory]=useState(tabs.value)
+
 //const [accountType, setAccountType] = useState(initialAccountType);
 const [isWindowAvailable, setIsWindowAvailable] = useState(false);
 let othent;
-  const dispatch=useDispatch();
+
 
   useEffect(() => {
     try{
       if (typeof window !== 'undefined') {
         setIsWindowAvailable(true);
+        //dispatch(userRegInfo({category:userCategory}));
          // Import the connect function only after window is available
          import('@othent/kms').then((module) => {
          othent= module
@@ -153,21 +158,21 @@ function handleSubmit(e){
          {/*bgPosition="center" bgSize="fit" backgroundOrigin="center" bgRepeat="no-repeat" bgImg="url(/ScaleGavel10.jpeg)"*/}
           <Box className="bg-[url(/signup/ScaleGavel5.webp)] bg-origin-padding bg-center bg-cover bg-no-repeat bg-clip-border "  width="50vw" height="88vh" padding="4" color="white" borderTopRadius="md">
    <VStack>    
-     <Tabs.Root defaultValue="Individual" variant="line" width="100%" fitted >
-      <Tabs.List>
-        <Tabs.Trigger value="Individual" className="text-black w-3xs m-2 text-lg font-black  hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
+     <Tabs.Root defaultValue="Individual" variant="line" width="100%" fitted   >
+      <Tabs.List >
+        <Tabs.Trigger value="Individual"  className="text-black w-3xs m-2 text-lg font-black  hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
           Individual
         </Tabs.Trigger>
-        <Tabs.Trigger value="Law Firm" className="text-black w-3xs m-2 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">  
+        <Tabs.Trigger value="Law firm"  className="text-black w-3xs m-2 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">  
         Law Firm
         </Tabs.Trigger>
-        <Tabs.Trigger value="Judiciary Staff" className="text-black w-3xs m-2 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
+        <Tabs.Trigger value="Judiciary Staff"  className="text-black w-3xs m-2 text-lg font-black hover:bg-sky-200 focus:bg-sky-700 focus:text-white" borderTopRadius="md">
         Judiciary Staff
         </Tabs.Trigger>
       </Tabs.List>
-      <Tabs.Content value="Individual"></Tabs.Content>
-      <Tabs.Content value="Law firm"></Tabs.Content>
-      <Tabs.Content value="Judiciary Staff"></Tabs.Content>
+      <Tabs.Content value="Individual" ><SignupForm tabsValue={tabs.value}/></Tabs.Content>
+      <Tabs.Content value="Law firm" ><SignupForm tabsValue={tabs.value}/></Tabs.Content>
+      <Tabs.Content value="Judiciary Staff"><SignupForm tabsValue={tabs.value}/></Tabs.Content>
     </Tabs.Root>
           {/* <form className="flex flex-col space-y-4">
               <fieldset className="mb-4">
