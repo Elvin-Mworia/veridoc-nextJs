@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import { updateStaffStation } from "../../store/userSlice/staffStation";
-import { Box ,Tabs,VStack} from "@chakra-ui/react"
+import { Box ,Tabs,VStack,useTabs} from "@chakra-ui/react"
 
 export default function Signup() {
   // const initialAccountType = {
@@ -24,6 +24,9 @@ const[email,setAddress]=useState(null)
 const[password,setPassword]=useState(null)
 const[confirmPassword,setConfirmPassword]=useState(null)
 const[accountType,setAccountType]=useState(null)
+const tabs = useTabs({
+  defaultValue: "Individual",
+})
 //const [accountType, setAccountType] = useState(initialAccountType);
 const [isWindowAvailable, setIsWindowAvailable] = useState(false);
 let othent;
