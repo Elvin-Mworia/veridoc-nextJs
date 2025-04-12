@@ -75,7 +75,7 @@ console.log(err);
   }
   };
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col bg-[url(/homepage/courtroom1.jpeg)] bg-origin-padding bg-center bg-cover bg-no-repeat bg-clip-border ">
       <div className="flex h-16 items-center w-full p-6">
         <Image
           className=""
@@ -85,8 +85,8 @@ console.log(err);
           alt="Veridoc Log"
         />
         <div className="ml-5">
-          <h1 className="text-3xl font-bold text-secondary-blue">Veridoc</h1>
-          <p className="text-sm text-alt-blue"> 
+          <h1 className="text-3xl font-bold text-white tracking-widest">Veridoc</h1>
+          <p className="text-sm text-alt-blue font-bold"> 
             Decentralizing Trust: Fairness for All
           </p>
         </div>
@@ -99,19 +99,19 @@ console.log(err);
       </div>
       <div className="grow flex items-center w-full">
         <div className="image-part w-3/6">
-          <Image
-            className=""
+          {/* <Image
+            className="opacity-50"
             width={500}
             height={500}
             src="/veridoc_logo.png"
             alt="Veridoc Log"
-          />
+          /> */}
         </div> 
         <div className="w-3/6 p-4">
-          <h2 className="text-4xl font-bold mb-4">
+          <h2 className="text-4xl font-bold mb-4 text-white outline-green-950">
             Empowering the Judiciary with Blockchain
           </h2>
-          <p className="mb-6">
+          <p className="mb-6 text-white">
             Veridoc introduces a revolutionary e-filing system designed to
             transform judicial document management. Utilizing blockchain
             technology, we offer unmatched security, transparency, and
