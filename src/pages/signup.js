@@ -20,12 +20,8 @@ export default function Signup() {
 const router = useRouter();
 const dispatch=useDispatch();
 const {walletAddress,name,role}=useSelector((state)=>(state.userInfo))
-const[phone,setPhone]=useState(null)
-const[fullname,setName]=useState(null)
-const[email,setAddress]=useState(null)
-const[password,setPassword]=useState(null)
-const[confirmPassword,setConfirmPassword]=useState(null)
-const[accountType,setAccountType]=useState(null)
+let {firstName,lastName,phone,email,password,confirmPassword}=useSelector((state)=>(state.registrationDetail))
+
 const tabs = useTabs({
   defaultValue: "Individual",
 })
@@ -96,23 +92,29 @@ console.log(err);
 
 function handleSubmit(e){
   e.preventDefault();
-  axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/l2`,{
-    walletAddress,email,phone,role,fullname
+  console.log(password+"  "+confirmPassword);
+  password= password.trim();
+  confirmPassword= confirmPassword.trim();
+  if (password!== confirmPassword) {
+    alert("passwords do not match");
+    return;
+  }
+  console.log(`${process.env.BACKENDURL}:${process.env.PORT}/users/register`)
+  axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/register`,{
+    firstName:firstName,lastName:lastName,email:email,phone:phone,password:password
   }).then((res)=>{
    console.log(res);
-   if(res.status===200){
+   if(res.status===201){
     alert("registered successfully,proceed to login");
-    setName(null);
-    setPhone(null);
-    setAddress(null);
+    dispatch(userRegInfo({firstName:"",lastName:"",email:"",phone:"",password:"",confirmPassword:""}));
    }
    console.log(res.data.message)
   router.push("/")
   }).catch((err)=>{
-    if(err.request.status===400){
-      alert(err.data.message.concat("proceed to login"));
-      router.push("/");
-    }
+    
+      alert(err.message);
+    //  router.push("/");
+      console.log(err);
   })
 
 }
