@@ -15,14 +15,14 @@ const inputVariants = {
 
 export default function SignupForm({ tabsValue }) {
   const inputFields = [
-    { label: "First Name", placeholder: "Joe", type: "text" },
-    { label: "Last Name", placeholder: "Doe", type: "text" },
-    { label: "Email", placeholder: "joedoe@gmail.com", type: "email" },
-    { label: "Phone Number", placeholder: "070000000", type: "tel" },
-    { label: "Password", placeholder: "password", type: "password", isPassword: true },
-    { label: "Confirm Password", placeholder: "password", type: "password", isConfirmPassword: true },
+    { label: "First Name", placeholder: "Joe", type: "text",stateName:"firstName" },
+    { label: "Last Name", placeholder: "Doe", type: "text",stateName:"lastName" },
+    { label: "Email", placeholder: "joedoe@gmail.com", type: "email" ,stateName:"email"},
+    { label: "Phone Number", placeholder: "070000000", type: "tel",stateName:"phone"},,
+    { label: "Password", placeholder: "password", type: "password", isPassword: true ,stateName:"password"},
+    { label: "Confirm Password", placeholder: "password", type: "password", isConfirmPassword: true ,stateName:"confirmPassword"},
   ];
-
+const dispatch=useDispatch();
   return (
     <Box width="80%" height="75%" className="m-.5">
       <Center>
@@ -49,6 +49,13 @@ export default function SignupForm({ tabsValue }) {
                         placeholder={field.placeholder}
                         className="p-2"
                         size="xs"
+                        onChange={(e) => {
+                          dispatch(
+                            userRegInfo(
+                              {[field.stateName]: e.target.value}
+                            )
+                          );
+                        }}
                       />
                     ) : (
                       <Input
@@ -57,6 +64,14 @@ export default function SignupForm({ tabsValue }) {
                         className="p-2"
                         size="xs"
                         type={field.type}
+                        stateName={field.stateName}
+                        onChange={(e) => {
+                          dispatch(
+                            userRegInfo({
+                              [field.stateName]: e.target.value
+                            })
+                          );
+                        }}
                       />
                     )}
                     {index === 4 && <PasswordStrengthMeter value={2} />}
