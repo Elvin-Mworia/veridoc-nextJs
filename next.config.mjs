@@ -7,6 +7,8 @@ const nextConfig = {
   },
   env: {
     WALLETPATH: '/wallet.json',
+    BACKENDURL: 'http://localhost',
+    PORT: '5001',
   }
 };
 
