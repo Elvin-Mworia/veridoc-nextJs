@@ -73,29 +73,35 @@ const inputVariants = {
          animate="animate"
          variants={inputVariants} placeholder="070000000" variant="subtle" className="p-2 text-black" size="xs" onChange={(e)=>{dispatch(userRegInfo({phone:e.target.value}))}} value={phone} />
       </Field.Root>
-      <motion.div 
-      initial="initial"
-      animate="animate"
-      variants={inputVariants}>
+      
       <Field.Root required>
+      <motion.div
+              initial="initial"
+              animate="animate"
+              variants={inputVariants}
+              maxWidth="264px">
         <Field.Label>
           Password <Field.RequiredIndicator />
         </Field.Label>
-       <PasswordInput  variant="subtle" placeholder="password" className="p-2 text-black"  size="xs" onChange={(e)=>{dispatch(userRegInfo({password:e.target.value}))}} value={password}/>
+       <PasswordInput  variant="subtle" placeholder="password" className="p-2 text-black" maxWidth="264px" size="xs" onChange={(e)=>{dispatch(userRegInfo({password:e.target.value}))}} value={password}/>
        <PasswordStrengthMeter  value={2}/>
+       </motion.div>
       </Field.Root>
-      </motion.div>
+     
+      
+      <Field.Root required>
       <motion.div 
       initial="initial"
       animate="animate"
-      variants={inputVariants} size="xs">
-      <Field.Root required>
+      variants={inputVariants} 
+      maxWidth="264px">
          <Field.Label>
          Confirm Password <Field.RequiredIndicator />
         </Field.Label>
-       < PasswordInput  variant="subtle" placeholder="password" className="p-2 text-black"  size="xs" onChange={(e)=>{dispatch(userRegInfo({confirmPassword:e.target.value}))}} value={confirmPassword}/>
+       < PasswordInput  variant="subtle" placeholder="password" className="p-2 text-black" maxWidth="264px" size="xs" onChange={(e)=>{dispatch(userRegInfo({confirmPassword:e.target.value}))}} value={confirmPassword}/>
+       </motion.div>
       </Field.Root>
-      </motion.div>
+     
             </VStack>
           </Center>
         </form>
