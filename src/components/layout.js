@@ -9,7 +9,8 @@ import { updateCaseStation } from "../../store/caseSlice/caseStation";
 import { updateCaseRank } from "../../store/caseSlice/caseRank";
 import { updateCaseDivision} from "../../store/caseSlice/caseDivision";
 import Template from "./template";
-import Link from "next/link"
+import Link from "next/link";
+import { AnimatePresence, motion } from 'framer-motion';
 export default function Layout({ children }) {
  const router = useRouter()
  const dispatch=useDispatch()
@@ -45,10 +46,20 @@ let othent;
     //console.log("Disconnect,\n", res);
   }catch(err){console.log(err)}
   };
-
+  const pageVariants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeIn' } },
+    exit: { opacity: 0, y: -10, transition: { duration: 0.5, ease: 'easeOut' } },
+  };
 
   return (
-    <div className="bg-transparent-blue/20 h-screen">
+    <AnimatePresence mode="wait">
+    <motion.div className="bg-transparent-blue/20 h-screen"
+      key={router.route}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageVariants}>
       <div className="flex h-16 items-center w-full p-6 bg-white">
         <Image
           className=""
@@ -71,6 +82,7 @@ let othent;
       </div>
 
       <Template className="px-6" >{children}</Template>
-    </div>
+    </motion.div>
+    </AnimatePresence>
   );
 }
