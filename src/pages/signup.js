@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import {updateuserinfo} from "../../store/userSlice/userInfo";
 import {updateLoginState} from "../../store/userSlice/loginStatus"
 import { updateStaffStation } from "../../store/userSlice/staffStation";
-import {userRegInfo} from "../../store/userSlice/userRegistration";
+import {updateUserRegInfo} from "../../store/userSlice/userRegistration";
 import { Box ,Tabs,VStack,useTabs,Center} from "@chakra-ui/react"
 import SignupForm from "@/components/SignupForm";
 export default function Signup() {
@@ -36,7 +36,7 @@ let othent;
     try{
       if (typeof window !== 'undefined') {
         setIsWindowAvailable(true);
-        //dispatch(userRegInfo({category:userCategory}));
+        //dispatch{updateUserRegInfo({category:userCategory}));
          // Import the connect function only after window is available
          import('@othent/kms').then((module) => {
          othent= module
@@ -106,7 +106,7 @@ function handleSubmit(e){
    console.log(res);
    if(res.status===201){
     alert("registered successfully,proceed to login");
-    dispatch(userRegInfo({firstName:"",lastName:"",email:"",phone:"",password:"",confirmPassword:""}));
+    dispatch(updateUserRegInfo({firstName:"",lastName:"",email:"",phone:"",password:"",confirmPassword:""}));
    }
    console.log(res.data.message)
   router.push("/")
