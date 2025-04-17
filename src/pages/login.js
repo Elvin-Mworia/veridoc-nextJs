@@ -6,32 +6,49 @@ import { useSelector,useDispatch} from "react-redux";
 import { useRouter } from 'next/navigation'
 import { Box ,Tabs,VStack,useTabs,Center} from "@chakra-ui/react"
 import LoginForm from "@/components/loginForm";
+import {updateuserinfo} from "../../store/userSlice/userInfo";
+import {updateLoginState} from "../../store/userSlice/loginStatus"
+import { updateStaffStation } from "../../store/userSlice/staffStation";
+
 export default function Login(){
     const router = useRouter();
     const dispatch=useDispatch();
-    const [isWindowAvailable, setIsWindowAvailable] = useState(false);
-    let othent;
-     useEffect(() => {
-        try{
-          if (typeof window !== 'undefined') {
-            setIsWindowAvailable(true);
-            //dispatch(userRegInfo({category:userCategory}));
-             // Import the connect function only after window is available
-             import('@othent/kms').then((module) => {
-             othent= module
-            });
-          }else{
-            setIsWindowAvailable(false);
-      
-          }
-        }catch(err){
-    console.log(err);
-        }
-      
-      }, [isWindowAvailable]);
+  const {email,password}=useSelector((state)=>(state.login))
+  
+     useEffect(() => {}, []);
     const tabs = useTabs({
         defaultValue: "Individual",
       })
+      async function handleLogin() {
+        // e.preventDefault();
+        try{
+           axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/v2/login`,{email:email,password:password}).then((res)=>{
+            console.log(res);
+            if(res.status===202){
+              dispatch(updateLoginState({loginStatus:true}))
+              //logic to derive the user walletaddress after successful login
+             dispatch(updateuserinfo({firstName:res.data.firstName,lastName:res.data.lastName,role:res.data.role,email:res.data.email,phone:res.data.phone}))
+                alert(res.data.message);
+                console.log(res.data)
+                if(res.data.role=="staff"){
+                 dispatch(updateStaffStation({station:res.data.station}))
+                  router.push( "/staff/dashboard");
+                }
+                if(res.data.role=="admin"){
+                  router.push( "/admin/dashboard");
+                }
+               if(res.data.role=="normalUser"){
+                  router.push( "/user/dashboard");
+                }
+              }        
+            }).catch((err)=>{
+              console.log(err);
+            }   
+          )
+      }catch(err){
+        console.log(err);
+       }
+    }
    
     return(    <div className="h-screen flex flex-col bg-[url(/homepage/courtroom1.jpeg)] bg-origin-padding bg-center bg-cover bg-no-repeat bg-clip-border "  >
           <div className="flex h-16 items-center w-full p-6">
@@ -71,6 +88,13 @@ export default function Login(){
           <Tabs.Content value="Law firm" ><Center><LoginForm tabsValue={tabs.value}/></Center></Tabs.Content>
           <Tabs.Content value="Judiciary Staff"><Center><LoginForm tabsValue={tabs.value}/></Center></Tabs.Content>
         </Tabs.Root>
+        <button
+                    type="submit"
+                    className="bg-main-blue rounded px-5 py-2 text-white mt-4 self-center uppercase text-sm"
+                    onClick={handleLogin}
+                  >
+                    login
+                  </button>
                   </VStack>  
               </Box>
             </div>
