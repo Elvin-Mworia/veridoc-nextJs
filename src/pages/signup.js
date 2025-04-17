@@ -131,7 +131,7 @@ function handleSubmit(e){
         </div>
         <button
           className="bg-main-blue rounded px-5 py-1 text-white ml-auto"
-          onClick={()=>{handleConnect('login')}}
+          onClick={()=>{router.push("/login")}}
         >
           Login
         </button>
