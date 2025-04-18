@@ -30,19 +30,19 @@ let othent;
     }
   }, [isWindowAvailable]);
 
-  const {loginStatus}=useSelector((state)=>(state.login))
-  const {name}=useSelector((state)=>(state.userInfo))
+  const {loginStatus,email}=useSelector((state)=>(state.login))
+  const {firstName,lastName}=useSelector((state)=>(state.userInfo))
   //disconnects the othentkms from the widow
   async function handleDisConnect() {
     try{
-    dispatch(updateLoginState({loginStatus:false}));
-    dispatch(updateuserinfo({walletAddress:"",name:"",role:""}));
+    dispatch(updateLoginState({loginStatus:false,email:"",password:""}));
+    dispatch(updateuserinfo({walletAddress:"",name:"",role:"",firstName:"",lastName:"",email:""}));
     dispatch(updatePayment({paid:false}))
     dispatch(updateCaseStation({courtStation:""}))
     dispatch(updateCaseRank({courtRank:""}))
     dispatch(updateCaseDivision({courtDivision:""}))
 
-    await  othent.disconnect();
+   // await  othent.disconnect();
     //console.log("Disconnect,\n", res);
   }catch(err){console.log(err)}
   };
