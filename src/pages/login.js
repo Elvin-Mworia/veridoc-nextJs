@@ -27,17 +27,17 @@ export default function Login(){
             if(res.status===202){
               dispatch(updateLoginState({loginStatus:true}))
               //logic to derive the user walletaddress after successful login
-             dispatch(updateuserinfo({firstName:res.data.firstName,lastName:res.data.lastName,role:res.data.role,email:res.data.email,phone:res.data.phone}))
+             dispatch(updateuserinfo({firstName:res.data.user.firstName,lastName:res.data.user.lastName,role:res.data.user.role,email:res.data.user.email,phone:res.data.user.phone}))
                 alert(res.data.message);
                 console.log(res.data)
-                if(res.data.role=="staff"){
+                if(res.data.user.role=="staff"){
                  dispatch(updateStaffStation({station:res.data.station}))
                   router.push( "/staff/dashboard");
                 }
-                if(res.data.role=="admin"){
+                if(res.data.user.role=="admin"){
                   router.push( "/admin/dashboard");
                 }
-               if(res.data.role=="normalUser"){
+               if(res.data.user.role=="user"){
                   router.push( "/user/dashboard");
                 }
               }        
