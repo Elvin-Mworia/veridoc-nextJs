@@ -21,11 +21,11 @@ export default function Home() {
       if (typeof window !== 'undefined') {
         setIsWindowAvailable(true);
          // Import the connect function only after window is available
-         import('@othent/kms').then((module) => {
-         othent= module
-        });
-      }else{
-        setIsWindowAvailable(false);
+        //  import('@othent/kms').then((module) => {
+        //  othent= module
+      //   });
+      // }else{
+      //   setIsWindowAvailable(false);
   
       }
     }catch(err){
@@ -37,37 +37,7 @@ console.log(err);
   async function handleConnect(auth) {
     try{
     if(auth==="login"){
-    othent.connect().then((res)=>{
-      let walletAddress=res.walletAddress;
-      let name=res.name;
-      axios.post(`${process.env.BACKENDURL}:${process.env.PORT}/users/login`,{walletAddress:walletAddress}).then((res)=>{
-      if(res.status===200){
-        dispatch(updateLoginState({loginStatus:true}))
-       dispatch(updateuserinfo({walletAddress:walletAddress,name:name,role:res.data.role}))
-          alert(res.data.message);
-          console.log(res.data)
-          if(res.data.role=="staff"){
-           dispatch(updateStaffStation({station:res.data.station}))
-            router.push( "/staff/dashboard");
-          }
-          if(res.data.role=="admin"){
-            router.push( "/admin/dashboard");
-          }
-         if(res.data.role=="normalUser"){
-            router.push( "/user/dashboard");
-          }
-     
-        }
-        
-      }).catch((err)=>{
-        console.log(err);
-        // if(err.request.status===400){
-        // alert(err.data.message.concat("try signing up!"))
-        // }
-        
-      })
-    
-    });
+      router.push( "/login");
     } else if(auth==="signup"){
     router.push( "/signup");
   }
