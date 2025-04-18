@@ -3,11 +3,17 @@ import {createSlice} from "@reduxjs/toolkit"
 const LoginSlice=createSlice({
 name:"login",
 initialState:{
-   loginStatus:false,
+email:"",
+loginStatus:false,
+password:""
 },
 reducers:{
     updateLoginState:(state,action)=>{
-        state.loginStatus=action.payload.loginStatus;
+       // state.loginStatus=action.payload.loginStatus;
+        return {
+            ...state, // Keep the existing state
+            ...action.payload, // Override with the new value(s)
+          };
     }
 }
 })

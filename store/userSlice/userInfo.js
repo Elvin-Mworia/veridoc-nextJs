@@ -4,14 +4,21 @@ const UserInfoSlice=createSlice({
 name:"userinfo",
 initialState:{
     walletAddress:"",
-    name:"", 
-    role:"",  
+    firstName:"", 
+    lastName:"",
+    email:"",
+    role:"", 
+    phone:""
 },
 reducers:{
     updateuserinfo:(state,action)=>{
-        state.walletAddress=action.payload.walletAddress;
-        state.name=action.payload.name;
-        state.role=action.payload.role;
+        // state.walletAddress=action.payload.walletAddress;
+        // state.name=action.payload.name;
+        // state.role=action.payload.role;
+        return {
+            ...state, // Keep the existing state
+            ...action.payload, // Override with the new value(s)
+          };
     }
 }
 })
