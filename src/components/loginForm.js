@@ -4,7 +4,7 @@ import { useDispatch,useSelector} from "react-redux";
 import {PasswordInput,} from "@/components/ui/password-input";
 import { motion } from "framer-motion";
 import { useState,useEffect } from "react";
-import { updateLoginState } from "../../store/reducers";
+import {updateLoginState} from "../../store/userSlice/loginStatus"
 
 
 const inputVariants = {
