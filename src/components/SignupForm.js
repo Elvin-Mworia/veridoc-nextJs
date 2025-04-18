@@ -1,10 +1,7 @@
 import { Box, VStack, Field, Input, Center } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { userRegInfo } from "../../store/userSlice/userRegistration";
-import {
-  PasswordInput,
-  PasswordStrengthMeter,
-} from "@/components/ui/password-input";
+import {PasswordInput, PasswordStrengthMeter} from "@/components/ui/password-input";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
